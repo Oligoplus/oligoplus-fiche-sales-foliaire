@@ -583,10 +583,14 @@
     overflow:hidden;
   }
   .temoin .temoin-quote{
-    font-size:15px; line-height:1.5; color:var(--vert);
-    font-weight:500;
+    font-size:15px; line-height:1.55; color:var(--vert);
+    font-weight:400;
     flex:1 1 auto;
     margin-bottom: 14px;
+  }
+  .temoin .temoin-quote strong{
+    font-weight:700;
+    color: var(--vert);
   }
   .temoin .temoin-quote::before{
     content:"« "; font-style:normal;
@@ -1203,17 +1207,17 @@ const TEMOINS = {
     title: "Les retours de nos clients",
     cards: [
       {
-        quote: "Je travaille avec Oligoplus depuis maintenant 3 ans, principalement sur blé. Sur la récolte 2026, on a vu de beaux écarts entre le témoin non traité et les parcelles qui ont reçu 20 L/ha de Climax à dernière feuille étalée. Surtout niveau protéines, on est à 2 voire 3 points. L'avantage c'est qu'on peut le mélanger avec le fongicide : donc un gros gain de temps à l'application.",
+        quote: "Je travaille avec Oligoplus depuis maintenant 3 ans, principalement sur blé. Sur la récolte 2026, on a vu <strong>de beaux écarts entre le témoin non traité et les parcelles qui ont reçu 20 L/ha de Climax à dernière feuille étalée</strong>. Surtout niveau protéines, <strong>on est à 2 voire 3 points</strong>. L'avantage c'est qu'on peut le mélanger avec le fongicide : donc un gros gain de temps à l'application.",
         name: "Thomas",
         meta: "Exploitant · Yonne (89) · 20 L/ha Climax à dernière feuille étalée"
       },
       {
-        quote: "J'ai pris le temps de revoir mes cahiers. Et là, surprise : j'ai constaté que sur les parcelles où j'avais utilisé le Climax, mes taux de protéines étaient entre 11 et 12,5 %. Là où je ne l'avais pas utilisé, elles étaient de 10 à 11 %. En dépit d'une année difficile, marquée par un excès d'eau et une virose, j'ai eu moins de problèmes que d'autres. Le Climax a joué un rôle positif — je pense qu'il a amélioré la santé de mes cultures.",
+        quote: "J'ai pris le temps de revoir mes cahiers. Et là, surprise : j'ai constaté que <strong>sur les parcelles où j'avais utilisé le Climax, mes taux de protéines étaient entre 11 et 12,5 %</strong>. Là où je ne l'avais pas utilisé, elles étaient de 10 à 11 %. En dépit d'une année difficile, marquée par un excès d'eau et une virose, j'ai eu moins de problèmes que d'autres. Le Climax a joué un rôle positif — je pense qu'il a amélioré la santé de mes cultures.",
         name: "Régis Dupuis",
         meta: "Agriculteur · Saint-Maixent-l'École, Deux-Sèvres (79) · 200 ha · 20 L/ha Climax tallage + T2"
       },
       {
-        quote: "Le rendement, le taux de protéines et la marge finale sont supérieurs pour la modalité avec les 20 L/ha de Climax. Dans des sols à potentiels limitants, le produit a homogénéisé l'ensemble de la parcelle. Dans des terres à haut potentiel, le Climax va déplafonner les rendements. Dans des terres à faible potentiel, il va permettre d'encadrer les risques et de limiter les pertes de rendement liées aux stress que subissent les plantes.",
+        quote: "<strong>Le rendement, le taux de protéines et la marge finale sont supérieurs</strong> pour la modalité avec les 20 L/ha de Climax. Dans des sols à potentiels limitants, le produit a <strong>homogénéisé l'ensemble de la parcelle</strong>. Dans des terres à haut potentiel, le Climax va <strong>déplafonner les rendements</strong>. Dans des terres à faible potentiel, il va permettre d'encadrer les risques et de limiter les pertes de rendement liées aux stress que subissent les plantes.",
         name: "Nicolas Lemane",
         meta: "Technicien agro · Ets Dupre-Lardeau · Indre (36) · Essai 2023 : +8 q/ha · +2 pts protéines · +128 €/ha marge"
       }
@@ -1223,17 +1227,17 @@ const TEMOINS = {
     title: "Les retours de nos clients",
     cards: [
       {
-        quote: "Nous avons appliqué au total 60 L/ha de Climax par voie foliaire en 10 passages (5 L/passage pour les 8 premiers passages puis 10 L/ha pour les 2 derniers passages) pour avoir l'effet « biberonnage ». Au niveau physiologique, nous avons remarqué que le produit augmentait la tubérisation des plants de pomme de terre (nombre de tubercules) tout en gardant une homogénéité des calibres. Résultat à la récolte : nous avons obtenu un gain de rendement de 5 t/ha sur la modalité testée, sans altérer les petits calibres qui sont les mieux rémunérés. Cela nous a permis d'améliorer notre marge finale de près de 1000 euros de l'hectare comparée au témoin.",
+        quote: "Nous avons appliqué au total 60 L/ha de Climax par voie foliaire en 10 passages (5 L/passage pour les 8 premiers passages puis 10 L/ha pour les 2 derniers passages) pour avoir l'effet « biberonnage ». Au niveau physiologique, nous avons remarqué que <strong>le produit augmentait la tubérisation des plants de pomme de terre</strong> tout en gardant une homogénéité des calibres. Résultat à la récolte : <strong>nous avons obtenu un gain de rendement de 5 t/ha</strong> sur la modalité testée, sans altérer les petits calibres qui sont les mieux rémunérés. Cela nous a permis <strong>d'améliorer notre marge finale de près de 1000 euros de l'hectare</strong> comparée au témoin.",
         name: "Guillaume Tupigny",
         meta: "Agriculteur · Somme (80) · 500 ha · Climax foliaire 60 L/ha en 10 passages"
       },
       {
-        quote: "Les résultats sont vraiment intéressants. En grenaille, par exemple, on a observé environ 500 000 tubercules supplémentaires par hectare par rapport à l'année dernière, avec un calibre plus homogène. En chair ferme, l'homogénéité des calibres était impressionnante. Pour les variétés de consommation, l'intérêt économique réside dans l'homogénéité des calibres au-dessus de 45 mm. Ça améliore nettement la rentabilité, car on évite d'avoir trop de petites pommes de terre. En chair ferme, on a eu environ 10 % de tubercules supplémentaires dans le calibre recherché, ce qui valorise mieux la récolte.",
+        quote: "Les résultats sont vraiment intéressants. En grenaille, par exemple, <strong>on a observé environ 500 000 tubercules supplémentaires par hectare</strong> par rapport à l'année dernière, avec un calibre plus homogène. En chair ferme, l'homogénéité des calibres était impressionnante. Pour les variétés de consommation, l'intérêt économique réside dans l'homogénéité des calibres au-dessus de 45 mm. Ça améliore nettement la rentabilité, car on évite d'avoir trop de petites pommes de terre. En chair ferme, <strong>on a eu environ 10 % de tubercules supplémentaires dans le calibre recherché</strong>, ce qui valorise mieux la récolte.",
         name: "Corentin Dekydtspotter",
         meta: "Chef de culture SAS Delvigne Magnier · Hauts-de-France · Climax foliaire"
       },
       {
-        quote: "Sur les parcelles traitées avec le Climax Ultra, on a eu de très bons rendements et une qualité exceptionnelle. Les pommes de terre étaient homogènes, avec une peau très claire et lisse, facile à laver. Même les acheteurs l'ont remarqué : la présentation était impeccable, sans coups, sans taches.",
+        quote: "Sur les parcelles traitées avec le Climax Ultra, on a eu <strong>de très bons rendements et une qualité exceptionnelle</strong>. Les pommes de terre étaient homogènes, avec une peau très claire et lisse, facile à laver. Même les acheteurs l'ont remarqué : <strong>la présentation était impeccable, sans coups, sans taches</strong>.",
         name: "Michel V.",
         meta: "Agriculteur · Pas-de-Calais (62) · Climax Ultra"
       }
