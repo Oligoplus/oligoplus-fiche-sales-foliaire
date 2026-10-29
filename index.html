@@ -27,7 +27,7 @@
 
   /* ================ Contrôles (refonte moderne) ================ */
   .controls{
-    position:sticky; top:0; z-index:10;
+    position:sticky; top:0; z-index:100;
     background: linear-gradient(180deg, #FFFEF4 0%, #FDF5E5 100%);
     color: var(--vert);
     padding: 24px 32px 20px;
@@ -38,6 +38,40 @@
     box-shadow: 0 4px 20px rgba(13,56,32,0.08);
     border-bottom: 1px solid rgba(13,56,32,0.08);
   }
+  .controls.collapsed{ padding:12px 32px; }
+  .controls.collapsed > *:not(h1):not(.collapse-btn){ display:none !important; }
+  .controls.collapsed h1{ margin-bottom:0; }
+  .collapse-btn{
+    position:absolute; top:16px; right:24px; z-index:101;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600;
+    letter-spacing:1px; text-transform:uppercase;
+    color: var(--vert); background: var(--blanc-casse);
+    border:1.5px solid var(--vert); border-radius:999px;
+    padding:6px 14px; cursor:pointer;
+  }
+  .collapse-btn:hover{ background: var(--vert); color: var(--blanc-casse); }
+  @media print{ .collapse-btn{ display:none !important; } }
+  .essai-btn{
+    width:100%; text-align:left; cursor:pointer;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color: var(--vert);
+    background: var(--blanc-casse); border:1px solid rgba(13,56,32,0.3); border-radius:8px;
+    padding:10px 14px;
+  }
+  .essai-btn:hover{ border-color: var(--vert); }
+  .essai-menu{
+    position:absolute; top:calc(100% + 4px); left:0; right:0; z-index:200;
+    max-height:360px; overflow-y:auto;
+    background: var(--blanc-casse); border:1px solid rgba(13,56,32,0.3); border-radius:10px;
+    box-shadow:0 8px 24px rgba(13,56,32,0.18);
+    padding:8px;
+  }
+  .essai-menu-head{ font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:rgba(13,56,32,0.6); padding:6px 8px 10px; }
+  .essai-opt{ display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:6px; cursor:pointer; }
+  .essai-opt:hover{ background:rgba(13,56,32,0.05); }
+  .essai-opt.is-disabled{ opacity:0.4; cursor:not-allowed; }
+  .essai-opt input{ flex:0 0 auto; accent-color: var(--vert); }
+  .essai-opt .eo-title{ flex:1 1 auto; font-size:12px; color: var(--vert); font-weight:500; text-align:left; text-transform:none; letter-spacing:0; }
+  .essai-opt .eo-sub{ flex:0 0 auto; font-family:'IBM Plex Mono', monospace; font-size:10px; color:rgba(13,56,32,0.55); white-space:nowrap; text-transform:none; letter-spacing:0; }
   .controls h1{
     grid-column: 1 / -1;
     font-size:20px; font-weight:700;
@@ -473,18 +507,18 @@
   }
   .essai .essai-grid{
     position:absolute; top:200px; left:60px; right:60px; bottom:80px;
-    display:grid; gap:16px;
+    display:flex; flex-wrap:wrap; justify-content:center; align-content:center; gap:16px;
   }
-  .essai .essai-grid.cols-2{ grid-template-columns: 1fr 1fr; }
-  .essai .essai-grid.cols-3{ grid-template-columns: 1fr 1fr 1fr; }
-  .essai .essai-grid.cols-3 .trial-card{ padding:14px 18px; }
-  .essai .essai-grid.cols-4{ grid-template-columns: 1fr 1fr 1fr 1fr; gap:12px; }
-  .essai .essai-grid.cols-4 .trial-card{ padding:12px 14px; }
-  .essai .essai-grid.cols-4 .trial-head{ font-size:14px; }
-  .essai .essai-grid.cols-4 .bar-label{ width:48px; font-size:9px; }
-  .essai .essai-grid.cols-4 .bar-fill{ font-size:10px; height:20px; padding-right:6px; }
-  .essai .essai-grid.cols-4 .trial-gain{ font-size:11px; }
-  .essai .essai-grid.cols-4 .trial-meta{ font-size:9px; }
+  .essai .essai-grid .trial-card{ flex:0 0 auto; box-sizing:border-box; }
+  .essai .essai-grid.n1 .trial-card{ width:60%; max-width:520px; }
+  .essai .essai-grid.n2 .trial-card{ width:calc(50% - 16px); max-width:460px; }
+  .essai .essai-grid.n3 .trial-card{ width:calc(33.333% - 16px); }
+  .essai .essai-grid.n4 .trial-card{ width:calc(50% - 16px); max-width:460px; }
+  .essai .essai-grid.n5 .trial-card,
+  .essai .essai-grid.n6 .trial-card{ width:calc(33.333% - 16px); }
+  .essai .essai-grid.n3 .trial-card,
+  .essai .essai-grid.n5 .trial-card,
+  .essai .essai-grid.n6 .trial-card{ padding:14px 18px; }
   .essai .trial-card{
     padding:18px 22px;
     border-left:3px solid var(--vert);
@@ -716,6 +750,114 @@
     color: var(--bleu-ciel); opacity:0.7;
   }
 
+  /* ================ Multi-culture + personnalisation preco ================ */
+  .cult-checks{ display:flex; flex-wrap:wrap; gap:8px; }
+  .cult-checks .ctl-check{ align-self:auto; padding:9px 14px; opacity:1; justify-content:flex-start; }
+  .cult-checks .ctl-check:has(input:checked){ border-color: var(--vert); background: rgba(13,56,32,0.05); }
+  .pack-row{ display:flex; flex-direction:column; gap:6px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px dashed rgba(13,56,32,0.15); }
+  .pack-row:last-child{ margin-bottom:0; border-bottom:none; padding-bottom:0; }
+  .pack-nums{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; }
+  .pack-nums label{ display:flex; flex-direction:column; font-size:10px; color:rgba(13,56,32,0.7); letter-spacing:0.5px; text-transform:uppercase; gap:3px; }
+  .pack-nums input{ padding:6px 8px; font-family:'IBM Plex Mono', monospace; font-size:12px; border:1px solid rgba(13,56,32,0.2); border-radius:6px; background: var(--blanc-casse); color: var(--vert); }
+  .preco .btn-perso{
+    position:absolute; top:28px; right:32px; z-index:10;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600;
+    letter-spacing:1px; text-transform:uppercase;
+    color: var(--blanc-casse); background: var(--vert);
+    border:1.5px solid var(--vert); border-radius:999px;
+    padding:8px 16px; cursor:pointer;
+    box-shadow:0 2px 8px rgba(13,56,32,0.15);
+  }
+  .preco .btn-perso:hover{ background:#0a2d1a; }
+  .preco.editing .btn-perso{ background:#b3261e; border-color:#b3261e; }
+  .preco.editing .passage-picto{ cursor:pointer; outline:1.5px dashed rgba(13,56,32,0.4); outline-offset:4px; border-radius:50%; transition:outline-color .15s; }
+  .preco.editing .passage-picto:hover{ outline-color: var(--vert); outline-style:solid; }
+  .preco .picto-empty{ display:flex; align-items:center; justify-content:center; width:100%; height:100%; font-size:28px; color:rgba(13,56,32,0.3); font-weight:300; }
+  .preco .picto-picker{
+    position:absolute; top:100%; left:50%; transform:translateX(-50%);
+    margin-top:10px; z-index:50;
+    background: var(--blanc-casse); border:1px solid rgba(13,56,32,0.3); border-radius:10px;
+    padding:10px; box-shadow:0 8px 24px rgba(13,56,32,0.18);
+    display:grid; grid-template-columns:repeat(4, 44px); gap:6px;
+  }
+  .preco .picto-picker button{
+    width:44px; height:44px; padding:4px; cursor:pointer;
+    background: var(--blanc-casse); border:1.5px solid rgba(13,56,32,0.15); border-radius:50%;
+    color: var(--vert); display:flex; align-items:center; justify-content:center;
+  }
+  .preco .picto-picker button:hover{ border-color: var(--vert); background:rgba(13,56,32,0.05); }
+  .preco .picto-picker button[aria-selected="true"]{ border-color: var(--vert); background: var(--vert); color: var(--blanc-casse); }
+  .preco .picto-picker button[aria-selected="true"] svg *{ stroke: var(--blanc-casse) !important; }
+  .preco .picto-picker svg{ width:26px; height:26px; }
+  .preco .picto-picker .pk-none{ font-size:18px; }
+  .preco.editing .passage-elements[contenteditable]{
+    outline:1px dashed rgba(13,56,32,0.5); outline-offset:3px;
+    min-width:60px; min-height:1em; cursor:text; white-space:pre-line;
+  }
+  .preco.editing .passage-elements[contenteditable]:focus{ outline:1.5px solid var(--vert); }
+  .preco.editing h2[contenteditable]#out-preco-titre, .preco.editing h2[contenteditable]{
+    outline:1px dashed rgba(13,56,32,0.5); outline-offset:6px; cursor:text; border-radius:4px;
+  }
+  .preco.editing h2[contenteditable]:focus{ outline:1.5px solid var(--vert); }
+  .preco .field-wrap{ position:relative; display:flex; align-items:center; justify-content:center; gap:4px; }
+  .preco .field-picker{ display:none; }
+  .preco.editing .field-picker{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:20px; height:20px; padding:0;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; font-weight:600;
+    color: var(--vert); background: var(--blanc-casse);
+    border:1px solid rgba(13,56,32,0.35); border-radius:50%; cursor:pointer;
+  }
+  .preco.editing .field-picker:hover{ background: var(--vert); color: var(--blanc-casse); }
+  .preco .options-picker{
+    position:absolute; top:calc(100% + 6px); left:50%; transform:translateX(-50%);
+    z-index:60; min-width:200px; max-height:260px; overflow-y:auto;
+    background: var(--blanc-casse); border:1px solid rgba(13,56,32,0.3); border-radius:10px;
+    padding:6px; box-shadow:0 8px 24px rgba(13,56,32,0.18);
+    display:flex; flex-direction:column; gap:2px;
+  }
+  .preco .options-picker button{
+    text-align:left; padding:8px 12px; cursor:pointer;
+    background:transparent; border:none; border-radius:6px;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color: var(--vert);
+  }
+  .preco .options-picker button:hover{ background:rgba(13,56,32,0.08); }
+  .preco .options-picker .opt-autre{ border-top:1px solid rgba(13,56,32,0.15); margin-top:4px; padding-top:10px; font-style:italic; }
+  @media print{ .preco .btn-perso, .preco .perso-bar, .preco .passage-del, .preco .picto-picker, .preco .field-picker, .preco .options-picker{ display:none !important; } .preco.editing .passage-picto{ outline:none !important; } }
+  .preco .perso-bar{
+    display:none; position:absolute; top:8px; right:24px; gap:8px; z-index:6;
+  }
+  .preco.editing .perso-bar{ display:flex; }
+  .preco .perso-bar button{
+    font-family:'IBM Plex Mono', monospace; font-size:10px; font-weight:500;
+    letter-spacing:0.5px; color: var(--vert); background: var(--blanc-casse);
+    border:1px solid rgba(13,56,32,0.3); border-radius:6px;
+    padding:4px 10px; cursor:pointer;
+  }
+  .preco .perso-bar button:hover{ background: var(--vert); color: var(--blanc-casse); }
+  .preco .passage-del{
+    display:none; position:absolute; top:-4px; right:-2px; z-index:5;
+    width:20px; height:20px; line-height:16px; padding:0; text-align:center;
+    border-radius:50%; border:1px solid rgba(13,56,32,0.4);
+    background: var(--blanc-casse); color: var(--vert);
+    font-size:14px; cursor:pointer;
+  }
+  .preco.editing .passage-del{ display:block; }
+  .preco .passage-del:hover{ background:#b3261e; border-color:#b3261e; color:#fff; }
+  .preco.editing .passage-stade[contenteditable],
+  .preco.editing .passage-produits[contenteditable]{
+    outline:1px dashed rgba(13,56,32,0.5); outline-offset:3px;
+    min-width:60px; min-height:1.2em; cursor:text;
+  }
+  .preco.editing .passage-stade[contenteditable]:focus,
+  .preco.editing .passage-produits[contenteditable]:focus{ outline:1.5px solid var(--vert); }
+  .preco.editing [contenteditable]:empty::before{ content:attr(data-ph); opacity:0.45; }
+  @media print{
+    .preco .btn-perso, .preco .perso-bar, .preco .passage-del{ display:none !important; }
+    .preco.editing [contenteditable]{ outline:none !important; }
+    .preco [contenteditable]:empty::before{ content:none !important; }
+  }
+
   /* ================ Impression ================ */
   /* Impression — slide native 1280×720 (16:9) remplie à bloc */
   @page { size: 338.67mm 190.5mm; margin: 0; }
@@ -754,26 +896,24 @@
 <!-- ==================== Barre de contrôle ==================== -->
 <div class="controls">
   <h1>Fiche commerciale Nutrition Foliaire <small>Oligo+ × BRANDT · personnalisation</small></h1>
+  <button type="button" class="collapse-btn" id="collapse-btn" onclick="this.closest('.controls').classList.toggle('collapsed'); this.textContent = this.closest('.controls').classList.contains('collapsed') ? 'Déplier ▾' : 'Replier ▴';">Replier ▴</button>
 
   <div class="ctl ctl-wide">
     <label>Nom agriculteur</label>
     <input id="agri" type="text" placeholder="Jean-Marc Dupont — EARL des Peupliers" />
   </div>
 
-  <div class="ctl">
-    <label>Culture</label>
-    <select id="culture">
-      <option value="ble">Blé</option>
-      <option value="colza">Colza</option>
-      <option value="betteraves">Betteraves</option>
-      <option value="pdt">Pomme de terre</option>
-    </select>
+  <div class="ctl ctl-wide">
+    <label>Cultures <span style="opacity:0.6;font-weight:400;text-transform:none;letter-spacing:0;">(1 slide préco + 1 slide compo par culture)</span></label>
+    <div class="cult-checks" id="cultures">
+      <label class="ctl-check"><input type="checkbox" class="cult-cb" value="ble" checked /><span>Blé / Céréales</span></label>
+      <label class="ctl-check"><input type="checkbox" class="cult-cb" value="colza" /><span>Colza</span></label>
+      <label class="ctl-check"><input type="checkbox" class="cult-cb" value="betteraves" /><span>Betteraves</span></label>
+      <label class="ctl-check"><input type="checkbox" class="cult-cb" value="pdt" /><span>Pomme de terre</span></label>
+    </div>
   </div>
 
-  <div class="ctl ctl-wide">
-    <label>Pack</label>
-    <select id="preco"></select>
-  </div>
+  <div class="ctl ctl-wide" id="pack-selects"></div>
 
   <div class="ctl ctl-wide">
     <label>Problématique</label>
@@ -783,31 +923,18 @@
       <option value="proteines-ble">+3% protéines (blé)</option>
       <option value="autre">Autre (texte libre)</option>
     </select>
+    <input id="problem-autre" type="text" placeholder="Décrivez la problématique…" style="display:none;margin-top:8px;" />
   </div>
 
-  <div class="ctl">
-    <label>Surface (ha)</label>
-    <input id="surface" type="text" value="67" />
-  </div>
+  <input id="surface" type="hidden" value="67" />
+  <input id="catotal" type="hidden" value="3 956" />
+  <input id="coutha" type="hidden" value="59" />
 
-  <div class="ctl">
-    <label>Investissement total (€)</label>
-    <input id="catotal" type="text" value="3 956" />
-  </div>
-
-  <div class="ctl">
-    <label>Investissement (€/ha)</label>
-    <input id="coutha" type="text" value="59" />
-  </div>
-
-  <div class="ctl ctl-wide">
-    <label>Résultats essais</label>
-    <select id="essai">
-      <option value="">Aucun</option>
-      <option value="ble">Blé</option>
-      <option value="pdt">Pommes de terre</option>
-      <option value="mix">Les deux (multi-cultures)</option>
-    </select>
+  <div class="ctl ctl-wide" style="position:relative;">
+    <label>Résultats essais <span style="opacity:0.6;font-weight:400;text-transform:none;letter-spacing:0;">(max 6)</span></label>
+    <button type="button" id="essai-btn" class="essai-btn">Aucun — cliquez pour choisir ▾</button>
+    <div id="essai-menu" class="essai-menu" hidden></div>
+    <input id="essai" type="hidden" value="" />
   </div>
 
   <div class="ctl ctl-wide">
@@ -1002,9 +1129,22 @@ const PICTOS = {
 const PRECOS = {
   "ble": [
     {
+      id: "ble-climax-normal",
+      titre: "Blé — Climax",
+      sub: "",
+      volume: 40,
+      compo: "climax-normal",
+      passages: [
+        { num:1, stade:"Montaison", produits:"20 L/ha Climax",
+          agro:"Phase de construction du nombre d'épis — nutrition azotée optimisée." },
+        { num:2, stade:"DFE", produits:"20 L/ha Climax",
+          agro:"Phase déterminante pour le rendement — nutrition ciblée au moment clé." }
+      ]
+    },
+    {
       id: "ble-essentiel",
       titre: "Blé — Pack Essentiel",
-      sub: "Programme équilibré 3 passages — adapté à la majorité des situations.",
+      sub: "",
       volume: 18,
       compo: "essentiel",
       passages: [
@@ -1019,7 +1159,7 @@ const PRECOS = {
     {
       id: "ble-renforce",
       titre: "Blé — Pack Renforcé",
-      sub: "Programme intensifié 3 passages — pour objectif rendement optimal et qualité protéines.",
+      sub: "",
       volume: 20,
       compo: "renforce",
       passages: [
@@ -1036,7 +1176,7 @@ const PRECOS = {
     {
       id: "colza-essentiel",
       titre: "Colza — Pack Essentiel",
-      sub: "Programme 2 passages adapté au cycle colza.",
+      sub: "",
       volume: 18,
       compo: "essentiel",
       passages: [
@@ -1049,7 +1189,7 @@ const PRECOS = {
     {
       id: "colza-renforce",
       titre: "Colza — Pack Renforcé",
-      sub: "Programme 2 passages intensifiés pour objectif rendement optimal.",
+      sub: "",
       volume: 20,
       compo: "renforce",
       passages: [
@@ -1062,9 +1202,24 @@ const PRECOS = {
   ],
   "betteraves": [
     {
+      id: "bett-climax-normal",
+      titre: "Betteraves — Climax",
+      sub: "",
+      volume: 15,
+      compo: "climax-normal",
+      passages: [
+        { num:1, stade:"Couverture des rangs", produits:"5 L/ha Climax",
+          agro:"Phase de croissance active — nutrition d'accompagnement." },
+        { num:2, stade:"Couverture des rangs", produits:"5 L/ha Climax",
+          agro:"Nutrition continue durant la phase de croissance." },
+        { num:3, stade:"Couverture des rangs", produits:"5 L/ha Climax",
+          agro:"Soutien final sur la constitution du rendement." }
+      ]
+    },
+    {
       id: "bett-essentiel",
       titre: "Betteraves — Pack Essentiel",
-      sub: "Programme 3 passages adapté au cycle betterave.",
+      sub: "",
       volume: 18,
       compo: "essentiel",
       passages: [
@@ -1079,7 +1234,7 @@ const PRECOS = {
     {
       id: "bett-renforce",
       titre: "Betteraves — Pack Renforcé",
-      sub: "Programme 3 passages intensifiés pour objectif rendement optimal.",
+      sub: "",
       volume: 20,
       compo: "renforce",
       passages: [
@@ -1094,9 +1249,20 @@ const PRECOS = {
   ],
   "pdt": [
     {
+      id: "pdt-climax-normal",
+      titre: "Pomme de terre — Climax",
+      sub: "",
+      volume: 40,
+      compo: "climax-normal",
+      passages: [
+        { num:1, stade:"Début tubérisation", produits:"3 L/ha Climax par passage · ~13 passages",
+          agro:"Soutien de la tubérisation — application fractionnée (40 L/ha au total)." }
+      ]
+    },
+    {
       id: "pdt-grossissement",
       titre: "Pomme de terre — Pack Grossissement",
-      sub: "Programme multi-passages adapté à la phase de grossissement du tubercule.",
+      sub: "",
       volume: 36,
       compo: "grossissement",
       passages: [
@@ -1109,7 +1275,7 @@ const PRECOS = {
     {
       id: "pdt-tuberisation",
       titre: "Pomme de terre — Pack Tubérisation",
-      sub: "Programme renforcé axé sur la tubérisation — pour parcelles avec blocage phosphore.",
+      sub: "",
       volume: 66,
       compo: "tuberisation",
       passages: [
@@ -1128,6 +1294,20 @@ const PRECOS = {
    Compositions chiffrées officielles V5
    ======================================== */
 const COMPOS = {
+  "climax-normal": {
+    titre: "Climax",
+    volume: 40,
+    apports: [
+      ["N (Azote total)",   "1,7 %"],
+      ["dont N organique",  "1,53 %"],
+      ["dont N ammoniacal", "0,38 %"],
+      ["P₂O₅ (Phosphore)",  "0,5 %"],
+      ["K₂O (Potassium)",   "1,8 %"],
+      ["C organique",       "9,9 %"],
+      ["Matière sèche",     "26 %"],
+      ["Rapport Corg / N",  "5,2"]
+    ]
+  },
   "essentiel": {
     titre: "Pack Climax Essentiel",
     volume: 18,
@@ -1298,21 +1478,412 @@ const ESSAI_META = {
 };
 
 /* ======================================== */
-const selCulture = document.getElementById('culture');
-const selPreco = document.getElementById('preco');
+const CULT_ORDER = ['ble','colza','betteraves','pdt'];
+const CULT_NAMES = {ble:'Céréales', colza:'Colza', betteraves:'Betteraves', pdt:'Pomme de terre'};
+const CULT_PACK_LABELS = {ble:'Blé / Céréales', colza:'Colza', betteraves:'Betteraves', pdt:'Pomme de terre'};
 
-function updatePrecoOptions(){
-  const culture = selCulture.value;
-  const options = PRECOS[culture] || [];
-  selPreco.innerHTML = '';
-  options.forEach(p => {
-    const opt = document.createElement('option');
-    opt.value = p.id;
-    opt.textContent = p.titre;
-    selPreco.appendChild(opt);
-  });
-  render();
+// Compositions solutions (verbatim V5)
+const SOL_ELEMENTS = {
+  "Solution 1": "Soufre · Bore · Manganèse · Molybdène · Zinc",
+  "Solution 2": "Potassium · Bore · Molybdène",
+  "Mystique": "Phosphore · Cuivre · Manganèse · Zinc",
+  "Étincelle": "Phosphore · Potassium · Calcium · Magnésium · Zinc · Manganèse",
+  "Climax": "16 acides aminés"
+};
+
+/* Personnalisations slide préco : clé 'culture|packId' -> [{stade, produits}] (la compo reste figée) */
+const CUSTOM = {};
+const CUSTOM_TITRES = {};
+const EDITING = new Set();
+
+/* Templates : #slide-preco et #slide-compo sont sortis du stage, clonés à chaque render */
+const stageEl = document.querySelector('.stage');
+const TPL_PRECO = document.getElementById('slide-preco');
+const TPL_COMPO = document.getElementById('slide-compo');
+const tplHolder = document.createElement('div');
+tplHolder.id = 'slide-templates';
+tplHolder.hidden = true;
+document.body.appendChild(tplHolder);
+[TPL_PRECO, TPL_COMPO].forEach(t => {
+  t.querySelectorAll('[id]').forEach(e => e.setAttribute('data-k', e.id));
+  tplHolder.appendChild(t);
+});
+
+function q(slide, k){ return slide.querySelector('[data-k="' + k + '"]'); }
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function cloneTpl(tpl, cls){
+  const c = tpl.cloneNode(true);
+  c.removeAttribute('id');
+  c.querySelectorAll('[id]').forEach(e => e.removeAttribute('id'));
+  c.classList.remove('hidden');
+  c.classList.add(cls);
+  return c;
 }
+
+/* ----- Sélection cultures / packs ----- */
+function syncPackSelects(){
+  const host = document.getElementById('pack-selects');
+  const checked = [...document.querySelectorAll('.cult-cb:checked')].map(c => c.value);
+  CULT_ORDER.forEach(cult => {
+    let row = host.querySelector('[data-row="' + cult + '"]');
+    if (checked.includes(cult)){
+      if (!row){
+        row = document.createElement('div');
+        row.className = 'pack-row';
+        row.setAttribute('data-row', cult);
+        const lab = document.createElement('label');
+        lab.textContent = 'Pack · ' + CULT_PACK_LABELS[cult];
+        const sel = document.createElement('select');
+        sel.setAttribute('data-cult', cult);
+        (PRECOS[cult] || []).forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = p.titre;
+          sel.appendChild(opt);
+        });
+        sel.addEventListener('change', render);
+        row.appendChild(lab);
+        row.appendChild(sel);
+        // Champs chiffres spécifiques à la culture (initialisés depuis les globaux)
+        const nums = document.createElement('div');
+        nums.className = 'pack-nums';
+        nums.innerHTML = `
+          <label>Surface (ha)<input type="text" data-f="surface" value="${document.getElementById('surface').value}"></label>
+          <label>Invest. total (€)<input type="text" data-f="catotal" value="${document.getElementById('catotal').value}"></label>
+          <label>Invest. (€/ha)<input type="text" data-f="coutha" value="${document.getElementById('coutha').value}"></label>
+        `;
+        nums.querySelectorAll('input').forEach(i => i.addEventListener('input', render));
+        row.appendChild(nums);
+      }
+      host.appendChild(row); // (ré)ordonne selon CULT_ORDER
+    } else if (row){
+      row.remove();
+    }
+  });
+}
+
+function selectedPairs(){
+  const pairs = [];
+  CULT_ORDER.forEach(cult => {
+    const cb = document.querySelector('.cult-cb[value="' + cult + '"]');
+    if (!cb || !cb.checked) return;
+    const sel = document.querySelector('#pack-selects select[data-cult="' + cult + '"]');
+    const preco = sel ? findPreco(sel.value) : null;
+    if (preco) pairs.push({cult, preco});
+  });
+  return pairs;
+}
+
+/* ----- Passages (timeline) ----- */
+const STADES_OPTIONS = [
+  "Tallage","Montaison","DFE","Épiaison","Reprise de végétation","Floraison",
+  "6-8 feuilles","Début tubérisation","Couverture des rangs","Croissance",
+  "Crochet","Fermeture","Stabilisée"
+];
+const PRODUITS_OPTIONS = ["Climax","Solution 1","Solution 2","Mystique","Étincelle"];
+const PICTO_LABELS = {
+  tallage:"Tallage", dfe:"DFE", epiaison:"Épiaison", reprise:"Reprise de végétation",
+  floraison:"Floraison", feuilles:"Feuilles", couverture:"Couverture des rangs",
+  croissance:"Croissance", crochet:"Crochet", fermeture:"Fermeture", stabilisee:"Stabilisée"
+};
+function autoNotes(produits){
+  const found = [];
+  Object.keys(SOL_ELEMENTS).forEach(k => {
+    if ((produits || '').includes(k)) found.push(`${k} — ${SOL_ELEMENTS[k]}`);
+  });
+  return found.join('\n');
+}
+function getPassages(cult, preco, useCustom){
+  const key = cult + '|' + preco.id;
+  if (useCustom !== false && CUSTOM[key]) return CUSTOM[key];
+  return preco.passages.map(p => ({stade: p.stade, produits: p.produits, picto: stadeToPictoKey(p.stade), notes: autoNotes(p.produits)}));
+}
+
+function setEditable(el, on){
+  el.querySelectorAll('.passage-stade, .passage-produits, .passage-elements').forEach(c => {
+    if (on) c.setAttribute('contenteditable', 'true'); else c.removeAttribute('contenteditable');
+  });
+}
+
+function buildPassageEl(p){
+  const div = document.createElement('div');
+  div.className = 'passage';
+  const pictoKey = (p.picto != null ? p.picto : stadeToPictoKey(p.stade || '')) || '';
+  const pictoSvg = pictoKey && PICTOS[pictoKey] ? PICTOS[pictoKey] : '';
+  const notes = p.notes != null ? p.notes : autoNotes(p.produits);
+  div.innerHTML = `
+    <button type="button" class="passage-del" data-act="del" title="Supprimer ce passage">×</button>
+    <div class="passage-picto" data-act="picto-open" data-picto="${pictoKey}" title="Changer le picto">${pictoSvg || '<span class="picto-empty">+</span>'}</div>
+    <div class="field-wrap">
+      <div class="passage-stade" data-ph="Stade">${escHtml(p.stade || '')}</div>
+      <button type="button" class="field-picker" data-act="pick-stade" title="Choisir un stade">▾</button>
+    </div>
+    <div class="field-wrap">
+      <div class="passage-produits" data-ph="Produits · dose">${escHtml(p.produits || '')}</div>
+      <button type="button" class="field-picker" data-act="pick-produit" title="Choisir un produit">▾</button>
+    </div>
+    <div class="passage-elements" data-ph="Notes / composition">${escHtml(notes).replace(/\n/g,'<br>')}</div>
+  `;
+  return div;
+}
+
+function openOptionsPicker(anchor, slide, options, onPick){
+  document.querySelectorAll('.options-picker').forEach(e => e.remove());
+  const pop = document.createElement('div');
+  pop.className = 'options-picker';
+  pop.innerHTML = options.map(o => `<button type="button" data-opt="${escHtml(o)}">${escHtml(o)}</button>`).join('')
+    + '<button type="button" data-opt="__autre__" class="opt-autre">Autre (texte libre)…</button>';
+  pop.addEventListener('click', e => {
+    const b = e.target.closest('button[data-opt]');
+    if (!b) return;
+    onPick(b.dataset.opt);
+    pop.remove();
+  });
+  anchor.appendChild(pop);
+  setTimeout(() => {
+    document.addEventListener('click', function closer(ev){
+      if (!pop.contains(ev.target) && !ev.target.closest('.field-picker')){
+        pop.remove(); document.removeEventListener('click', closer);
+      }
+    });
+  }, 0);
+}
+
+function openPictoPicker(passage, slide){
+  // Ferme toute autre popover
+  document.querySelectorAll('.picto-picker').forEach(e => e.remove());
+  const current = passage.querySelector('.passage-picto').dataset.picto || '';
+  const pop = document.createElement('div');
+  pop.className = 'picto-picker';
+  const items = ['<button type="button" data-pk="" title="Aucun picto" class="pk-none"' + (current===''?' aria-selected="true"':'') + '>∅</button>']
+    .concat(Object.keys(PICTOS).map(k => `<button type="button" data-pk="${k}" title="${PICTO_LABELS[k]||k}"${k===current?' aria-selected="true"':''}>${PICTOS[k]}</button>`))
+    .join('');
+  pop.innerHTML = items;
+  pop.addEventListener('click', e => {
+    const b = e.target.closest('button[data-pk]');
+    if (!b) return;
+    const k = b.dataset.pk;
+    const pictoEl = passage.querySelector('.passage-picto');
+    pictoEl.dataset.picto = k;
+    pictoEl.innerHTML = (k && PICTOS[k]) ? PICTOS[k] : '<span class="picto-empty">+</span>';
+    syncCustom(slide);
+    pop.remove();
+  });
+  passage.querySelector('.passage-picto').appendChild(pop);
+  // Close on click outside
+  setTimeout(() => {
+    document.addEventListener('click', function closer(ev){
+      if (!pop.contains(ev.target) && !ev.target.closest('.passage-picto')){
+        pop.remove(); document.removeEventListener('click', closer);
+      }
+    });
+  }, 0);
+}
+
+function refreshPassageExtras(div){
+  // En mode édition on ne touche plus au picto ni aux notes (choix sales).
+}
+
+function renderPassages(slide){
+  const [cult, packId] = slide.dataset.key.split('|');
+  const preco = findPreco(packId);
+  const editing = slide.classList.contains('editing');
+  const list = getPassages(cult, preco, !slide._std);
+  const wrap = q(slide, 'out-passages');
+  wrap.innerHTML = '';
+  wrap.style.gridTemplateColumns = `repeat(${Math.max(list.length, 1)}, 1fr)`;
+  const rail = document.createElement('div');
+  rail.className = 'timeline-rail';
+  wrap.appendChild(rail);
+  list.forEach(p => {
+    const el = buildPassageEl(p);
+    if (editing) setEditable(el, true);
+    wrap.appendChild(el);
+  });
+  const n = list.length;
+  const pb = document.getElementById('problem');
+  const pbLabels = {'generale':'Généraliste','stress-hydrique':'Stress hydrique','proteines-ble':'+3% protéines','autre':(document.getElementById('problem-autre').value.trim())};
+  const pbVal = pb ? (pbLabels[pb.value] || '') : '';
+  const pbSuffix = pbVal ? ` · ${pbVal}` : '';
+  q(slide, 'out-preco-tag').textContent = `${CULT_NAMES[cult] || 'Préconisation'} · ${n} passage${n > 1 ? 's' : ''}${pbSuffix}`;
+}
+
+function syncCustom(slide){
+  const key = slide.dataset.key;
+  CUSTOM[key] = [...q(slide, 'out-passages').querySelectorAll('.passage')].map(d => {
+    const stade = d.querySelector('.passage-stade').textContent.trim();
+    const pictoEl = d.querySelector('.passage-picto');
+    const notesEl = d.querySelector('.passage-elements');
+    const picto = pictoEl && pictoEl.dataset.picto != null ? pictoEl.dataset.picto : stadeToPictoKey(stade);
+    return {
+      stade,
+      produits: d.querySelector('.passage-produits').textContent.trim(),
+      picto,
+      notes: notesEl ? notesEl.innerText.trim() : ''
+    };
+  });
+}
+
+/* ----- Construction des slides préco / compo (clones des templates) ----- */
+function buildPrecoSlide(cult, preco, opts){
+  opts = opts || {};
+  const slide = cloneTpl(TPL_PRECO, 'gen-preco');
+  slide.dataset.key = cult + '|' + preco.id;
+  if (opts.std) slide._std = true;
+  const val = id => document.getElementById(id).value.trim() || '—';
+  const perCultInput = f => {
+    const el = document.querySelector('#pack-selects .pack-row[data-row="' + cult + '"] input[data-f="' + f + '"]');
+    return el && el.value.trim() ? el.value.trim() : val(f);
+  };
+  q(slide, 'out-agri-2').textContent = val('agri');
+  q(slide, 'out-surface').textContent = perCultInput('surface');
+  q(slide, 'out-catotal').textContent = perCultInput('catotal');
+  q(slide, 'out-coutha').textContent = perCultInput('coutha');
+  const titreKey = cult + '|' + preco.id;
+  const titreEl = q(slide, 'out-preco-titre');
+  titreEl.textContent = (CUSTOM_TITRES[titreKey] != null ? CUSTOM_TITRES[titreKey] : preco.titre);
+  titreEl.dataset.ph = 'Titre';
+  q(slide, 'out-preco-sub').textContent = preco.sub;
+  q(slide, 'out-preco-hero').className = 'pack-hero culture-' + cult;
+  slide.classList.toggle('ibc-mode', document.getElementById('ibc-mode').checked);
+  if (!opts.std){
+    slide.insertAdjacentHTML('beforeend', '<button type="button" class="btn-perso" data-act="perso">Personnaliser</button>');
+    q(slide, 'out-passages').parentNode.insertAdjacentHTML('beforeend',
+      '<div class="perso-bar"><button type="button" data-act="add">+ Ajouter un passage</button><button type="button" data-act="reset">Réinitialiser</button></div>');
+    if (EDITING.has(slide.dataset.key)){
+      slide.classList.add('editing');
+      slide.querySelector('.btn-perso').textContent = 'Terminer';
+    }
+  }
+  renderPassages(slide);
+  if (opts.std) slide.querySelectorAll('.passage-del').forEach(b => b.remove());
+  return slide;
+}
+
+function buildCompoSlide(preco){
+  const compo = preco.compo ? COMPOS[preco.compo] : null;
+  if (!compo) return null;
+  const slide = cloneTpl(TPL_COMPO, 'gen-compo');
+  q(slide, 'out-compo-titre').textContent = compo.titre;
+  q(slide, 'out-compo-id').textContent = '· ' + preco.titre + ' ·';
+  q(slide, 'out-compo-volume').textContent = compo.volume;
+  const apportsWrap = q(slide, 'out-compo-apports');
+  apportsWrap.innerHTML = '';
+  compo.apports.forEach(([n,v]) => {
+    const d = document.createElement('div');
+    d.innerHTML = `<span class="n">${n}</span><span class="v">${v}</span>`;
+    apportsWrap.appendChild(d);
+  });
+  return slide;
+}
+
+function renderPrecoCompo(){
+  stageEl.querySelectorAll('.slide.gen-preco, .slide.gen-compo').forEach(e => e.remove());
+  const pairs = selectedPairs();
+  const slideEssai = document.getElementById('slide-essai');
+  const slideTemoin = document.getElementById('slide-temoin');
+  pairs.forEach(({cult, preco}) => {
+    stageEl.insertBefore(buildPrecoSlide(cult, preco), slideEssai);
+  });
+  if (!document.getElementById('hide-compo').checked){
+    let anchor = slideTemoin;
+    pairs.forEach(({preco}) => {
+      const c = buildCompoSlide(preco);
+      if (!c) return;
+      anchor.after(c);
+      anchor = c;
+    });
+  }
+}
+
+/* ----- Interactions slide préco (délégation) ----- */
+stageEl.addEventListener('click', e => {
+  const btn = e.target.closest('[data-act]');
+  if (!btn) return;
+  const slide = btn.closest('.slide.gen-preco');
+  if (!slide) return;
+  const key = slide.dataset.key;
+  const act = btn.dataset.act;
+  if (act === 'perso'){
+    const on = !slide.classList.contains('editing');
+    slide.classList.toggle('editing', on);
+    if (on) EDITING.add(key); else EDITING.delete(key);
+    slide.querySelectorAll('.passage').forEach(p => setEditable(p, on));
+    const titreEl = q(slide, 'out-preco-titre');
+    if (titreEl){ if (on) titreEl.setAttribute('contenteditable','true'); else titreEl.removeAttribute('contenteditable'); }
+    btn.textContent = on ? 'Terminer' : 'Personnaliser';
+  } else if (act === 'add'){
+    syncCustom(slide);
+    CUSTOM[key].push({stade: '', produits: '', picto: '', notes: ''});
+    renderPassages(slide);
+    const cells = slide.querySelectorAll('.passage-stade');
+    if (cells.length) cells[cells.length - 1].focus();
+  } else if (act === 'del'){
+    syncCustom(slide);
+    if (CUSTOM[key].length <= 1) return;
+    const idx = [...q(slide, 'out-passages').querySelectorAll('.passage')].indexOf(btn.closest('.passage'));
+    if (idx < 0) return;
+    CUSTOM[key].splice(idx, 1);
+    renderPassages(slide);
+  } else if (act === 'reset'){
+    delete CUSTOM[key];
+    renderPassages(slide);
+  } else if (act === 'picto-open'){
+    if (!slide.classList.contains('editing')) return;
+    const passage = btn.closest('.passage');
+    openPictoPicker(passage, slide);
+  } else if (act === 'pick-stade' || act === 'pick-produit'){
+    if (!slide.classList.contains('editing')) return;
+    const passage = btn.closest('.passage');
+    const wrap = btn.closest('.field-wrap');
+    const isStade = act === 'pick-stade';
+    const options = isStade ? STADES_OPTIONS : PRODUITS_OPTIONS;
+    openOptionsPicker(wrap, slide, options, (val) => {
+      const cell = wrap.querySelector(isStade ? '.passage-stade' : '.passage-produits');
+      if (val === '__autre__'){ cell.focus(); return; }
+      cell.textContent = val;
+      if (isStade){
+        const k = stadeToPictoKey(val);
+        const pictoEl = passage.querySelector('.passage-picto');
+        pictoEl.dataset.picto = k || '';
+        pictoEl.innerHTML = k && PICTOS[k] ? PICTOS[k] : '<span class="picto-empty">+</span>';
+      } else {
+        // Produit choisi : auto-remplir notes depuis SOL_ELEMENTS
+        const notesEl = passage.querySelector('.passage-elements');
+        if (notesEl) notesEl.innerHTML = SOL_ELEMENTS[val] ? escHtml(val + ' — ' + SOL_ELEMENTS[val]) : '';
+      }
+      syncCustom(slide);
+    });
+  }
+});
+stageEl.addEventListener('input', e => {
+  const slide = e.target.closest && e.target.closest('.slide.gen-preco');
+  if (!slide || !e.target.matches('[contenteditable]')) return;
+  const titreEl = q(slide, 'out-preco-titre');
+  if (e.target === titreEl){
+    CUSTOM_TITRES[slide.dataset.key] = titreEl.textContent.trim();
+  } else {
+    syncCustom(slide);
+  }
+});
+stageEl.addEventListener('focusout', e => {
+  const slide = e.target.closest && e.target.closest('.slide.gen-preco');
+  if (slide && e.target.matches('[contenteditable]')) refreshPassageExtras(e.target.closest('.passage'));
+});
+stageEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.matches && e.target.matches('[contenteditable]')){
+    e.preventDefault();
+    e.target.blur();
+  }
+});
+stageEl.addEventListener('paste', e => {
+  if (e.target.matches && e.target.matches('[contenteditable]')){
+    e.preventDefault();
+    const t = (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\s+/g, ' ');
+    document.execCommand('insertText', false, t);
+  }
+});
 
 function stadeToPictoKey(stade){
   const s = stade.toLowerCase();
@@ -1345,70 +1916,19 @@ function render(){
   document.getElementById('out-agri').textContent = agri;
   document.getElementById('out-probl').textContent = probl;
   document.getElementById('out-obj').textContent = obj;
-  document.getElementById('out-agri-2').textContent = agri;
 
-  const preco = findPreco(selPreco.value);
-  const slidePreco = document.getElementById('slide-preco');
-  if (preco){
-    document.getElementById('out-preco-titre').textContent = preco.titre;
-    document.getElementById('out-preco-sub').textContent = preco.sub;
-    const wrap = document.getElementById('out-passages');
-    wrap.innerHTML = '';
-    // Columns = number of passages for horizontal timeline
-    wrap.style.gridTemplateColumns = `repeat(${preco.passages.length}, 1fr)`;
-    // Add the horizontal rail (background line)
-    const rail = document.createElement('div');
-    rail.className = 'timeline-rail';
-    wrap.appendChild(rail);
-    preco.passages.forEach(p => {
-      const div = document.createElement('div');
-      div.className = 'passage';
-      const key = stadeToPictoKey(p.stade);
-      const picto = key ? `<div class="passage-picto">${PICTOS[key]}</div>` : '<div class="passage-picto"></div>';
-      // Compositions solutions (verbatim V5)
-      const SOL_ELEMENTS = {
-        "Solution 1": "Soufre · Bore · Manganèse · Molybdène · Zinc",
-        "Solution 2": "Potassium · Bore · Molybdène",
-        "Mystique": "Phosphore · Cuivre · Manganèse · Zinc",
-        "Étincelle": "Phosphore · Potassium · Calcium · Magnésium · Zinc · Manganèse",
-        "Climax": "16 acides aminés"
-      };
-      const found = [];
-      Object.keys(SOL_ELEMENTS).forEach(k => {
-        if (p.produits.includes(k)) found.push(`${k} — ${SOL_ELEMENTS[k]}`);
-      });
-      const elementsHtml = found.length ? `<div class="passage-elements">${found.join('<br>')}</div>` : '';
-      div.innerHTML = `
-        ${picto}
-        <div class="passage-stade">${p.stade}</div>
-        <div class="passage-produits">${p.produits}</div>
-        ${elementsHtml}
-      `;
-      wrap.appendChild(div);
-    });
-  } else {
-    document.getElementById('out-preco-titre').textContent = '—';
-    document.getElementById('out-preco-sub').textContent = '';
-    document.getElementById('out-passages').innerHTML = '';
-  }
-  document.getElementById('out-surface').textContent = document.getElementById('surface').value.trim() || '—';
-  document.getElementById('out-catotal').textContent = document.getElementById('catotal').value.trim() || '—';
-  document.getElementById('out-coutha').textContent = document.getElementById('coutha').value.trim() || '—';
+  // Slides préco + compo : une paire par culture cochée (clones des templates)
+  renderPrecoCompo();
 
-  const ibc = document.getElementById('ibc-mode').checked;
-  slidePreco.classList.toggle('ibc-mode', ibc);
-
-  // Essais style Brandt
-  const essai = document.getElementById('essai').value;
+  // Essais style Brandt — multi-select par IDs
+  const selectedIds = (document.getElementById('essai').value || '').split(',').filter(Boolean);
   const slideEssai = document.getElementById('slide-essai');
-  if (essai && ESSAI_META[essai]){
-    const meta = ESSAI_META[essai];
-    document.getElementById('out-essai-banner').textContent = meta.banner;
-    document.getElementById('out-essai-footnote').textContent = meta.footnote;
-    const trialIds = ESSAI_MODES[essai] || [];
-    const trials = trialIds.map(id => TRIALS.find(t => t.id === id)).filter(Boolean);
+  if (selectedIds.length){
+    document.getElementById('out-essai-banner').textContent = "Climax — Essais terrain";
+    document.getElementById('out-essai-footnote').textContent = "Essais Oligo+ · sources internes PDF résultats Climax";
+    const trials = selectedIds.map(id => TRIALS.find(t => t.id === id)).filter(Boolean);
     const grid = document.getElementById('out-essai-grid');
-    grid.className = 'essai-grid ' + (trials.length <= 4 ? 'cols-2' : trials.length <= 6 ? 'cols-3' : 'cols-4');
+    grid.className = 'essai-grid n' + trials.length;
     grid.innerHTML = '';
     // Max par unité pour échelle cohérente des barres (q/ha vs t/ha vs T/ha ne se mélangent pas)
     const maxByUnit = {};
@@ -1423,7 +1943,7 @@ function render(){
       card.className = 'trial-card';
       const cultureLabel = t.culture === 'ble' ? 'Blé' : t.culture === 'pdt' ? 'Pomme de terre' : t.culture === 'mais' ? 'Maïs' : t.culture === 'betterave' ? 'Betterave' : t.culture;
       const head = `Climax — ${cultureLabel}`;
-      const metaLine = [t.annee !== 'non précisé' ? t.annee : null, t.lieu, t.dose].filter(Boolean).join(' · ');
+      const metaLine = [t.annee !== 'non précisé' ? t.annee : null, t.lieu].filter(Boolean).join(' · ');
       if (t.textOnly) {
         card.innerHTML = `
           <div class="trial-head">${head}</div>
@@ -1487,49 +2007,75 @@ function render(){
     slideTemoin.classList.add('hidden');
   }
 
-  // Preco tag dynamique selon culture + nombre de passages
-  const tagEl = document.getElementById('out-preco-tag');
-  if (preco && tagEl){
-    const cultureNames = {ble:'Céréales', colza:'Colza', betteraves:'Betteraves', pdt:'Pomme de terre'};
-    const cultLabel = cultureNames[document.getElementById('culture').value] || 'Préconisation';
-    const nbPassages = preco.passages.length;
-    tagEl.textContent = `${cultLabel} · ${nbPassages} passages`;
-    // Hero image selon culture
-    const heroEl = document.getElementById('out-preco-hero');
-    if (heroEl){
-      const cult = document.getElementById('culture').value;
-      heroEl.className = 'pack-hero culture-' + cult;
-    }
-  }
-
-  // Composition — selon pack choisi
-  const compoKey = preco ? preco.compo : null;
-  const compo = compoKey ? COMPOS[compoKey] : null;
-  if (compo){
-    document.getElementById('out-compo-titre').textContent = compo.titre;
-    document.getElementById('out-compo-id').textContent = '· ' + preco.titre + ' ·';
-    document.getElementById('out-compo-volume').textContent = compo.volume;
-    const apportsWrap = document.getElementById('out-compo-apports');
-    apportsWrap.innerHTML = '';
-    compo.apports.forEach(([n,v]) => {
-      const d = document.createElement('div');
-      d.innerHTML = `<span class="n">${n}</span><span class="v">${v}</span>`;
-      apportsWrap.appendChild(d);
-    });
-  }
-
-  const hideCompo = document.getElementById('hide-compo').checked;
-  document.getElementById('slide-compo').classList.toggle('hidden', hideCompo);
 }
 
-selCulture.addEventListener('change', updatePrecoOptions);
-['agri','preco','problem','surface','catotal','coutha','probl','obj','essai','temoin','ibc-mode','hide-compo'].forEach(id => {
+document.querySelectorAll('.cult-cb').forEach(cb => {
+  cb.addEventListener('change', () => {
+    // Au moins une culture doit rester cochée
+    if (!document.querySelector('.cult-cb:checked')) cb.checked = true;
+    syncPackSelects();
+    render();
+  });
+});
+document.getElementById('problem').addEventListener('change', () => {
+  document.getElementById('problem-autre').style.display =
+    document.getElementById('problem').value === 'autre' ? 'block' : 'none';
+});
+/* ---- Multi-select essais (max 6) ---- */
+(function initEssaiPicker(){
+  const btn = document.getElementById('essai-btn');
+  const menu = document.getElementById('essai-menu');
+  const hidden = document.getElementById('essai');
+  if (!btn || !menu) return;
+  const cultureLbl = c => c==='ble'?'Blé':c==='pdt'?'Pomme de terre':c==='mais'?'Maïs':c==='betterave'?'Betterave':c;
+  function paint(){
+    const selected = (hidden.value || '').split(',').filter(Boolean);
+    menu.innerHTML = '<div class="essai-menu-head">Cocher jusqu\'à 6 résultats</div>' +
+      TRIALS.map(t => {
+        const chk = selected.includes(t.id);
+        const disabled = !chk && selected.length >= 6 ? 'disabled' : '';
+        const sub = [t.annee !== 'non précisé' ? t.annee : null, t.lieu].filter(Boolean).join(' · ');
+        return `<label class="essai-opt ${disabled?'is-disabled':''}">
+          <input type="checkbox" value="${t.id}" ${chk?'checked':''} ${disabled}>
+          <span class="eo-title">${cultureLbl(t.culture)} — ${t.gain}</span>
+          <span class="eo-sub">${sub}</span>
+        </label>`;
+      }).join('');
+    const n = selected.length;
+    btn.textContent = n ? `${n} résultat${n>1?'s':''} sélectionné${n>1?'s':''} ▾` : 'Aucun — cliquez pour choisir ▾';
+  }
+  btn.addEventListener('click', e => { e.stopPropagation(); menu.hidden = !menu.hidden; if (!menu.hidden) paint(); });
+  menu.addEventListener('change', e => {
+    const cbs = [...menu.querySelectorAll('input[type=checkbox]:checked')];
+    hidden.value = cbs.map(c => c.value).join(',');
+    paint();
+    window.render && window.render();
+  });
+  document.addEventListener('click', e => { if (!menu.hidden && !menu.contains(e.target) && e.target !== btn) menu.hidden = true; });
+  paint();
+})();
+
+/* ---- Fond image sur slide essais (hero garde atténué) ---- */
+(function essaiBg(){
+  const hero = document.querySelector('.fiche .hero-img');
+  const essai = document.getElementById('slide-essai');
+  if (!hero || !essai) return;
+  const bg = getComputedStyle(hero).backgroundImage;
+  if (bg && bg !== 'none'){
+    essai.style.backgroundImage = `linear-gradient(rgba(255,254,244,0.88), rgba(255,254,244,0.92)), ${bg}`;
+    essai.style.backgroundSize = 'cover';
+    essai.style.backgroundPosition = 'center';
+  }
+})();
+
+['agri','problem','problem-autre','surface','catotal','coutha','probl','obj','essai','temoin','ibc-mode','hide-compo'].forEach(id => {
   const el = document.getElementById(id);
   if (!el) return;
   el.addEventListener('input', render);
   el.addEventListener('change', render);
 });
-updatePrecoOptions();
+syncPackSelects();
+render();
 
 /* ===== Export PDF via impression navigateur ===== */
 function exportPDF(all){
@@ -1554,36 +2100,36 @@ function renderAllPages(){
 
   const stage = document.querySelector('.stage');
   const slideFiche = document.querySelector('.slide.fiche');
-  const slidePreco = document.getElementById('slide-preco');
   const slideEssai = document.getElementById('slide-essai');
   const slideTemoin = document.getElementById('slide-temoin');
-  const slideCompo = document.getElementById('slide-compo');
 
   const clones = [];
 
   // 1. Garde
-  document.getElementById('culture').value = 'ble';
-  updatePrecoOptions();
   render();
   clones.push(cloneAndTag(slideFiche));
 
-  // 2. Chaque culture × chaque pack → preco + compo
+  // 2. Chaque culture × chaque pack → preco + compo (clones des templates, passages d'origine, sans UI d'édition)
   const cultures = ['ble','colza','betteraves','pdt'];
   cultures.forEach(cult => {
-    document.getElementById('culture').value = cult;
-    updatePrecoOptions();
     const packs = PRECOS[cult] || [];
     packs.forEach(pack => {
-      document.getElementById('preco').value = pack.id;
-      render();
-      clones.push(cloneAndTag(slidePreco));
-      clones.push(cloneAndTag(slideCompo));
+      const sp = buildPrecoSlide(cult, pack, {std:true});
+      sp.classList.remove('gen-preco');
+      clones.push(sp);
+      const sc = buildCompoSlide(pack);
+      if (sc){ sc.classList.remove('gen-compo'); clones.push(sc); }
     });
   });
 
-  // 3. Essais : ble / pdt / mix
-  ['ble','pdt','mix'].forEach(mode => {
-    document.getElementById('essai').value = mode;
+  // 3. Essais : 3 variantes de combinaisons (blé / pdt / mix)
+  const ESSAI_EXPORT = {
+    "ble":  ["ble-vienne","ble-indre","ble-somme-180","ble-somme-205"],
+    "pdt":  ["pdt-2023","pdt-2024"],
+    "mix":  ["ble-vienne","ble-indre","pdt-2023","pdt-2024","mais-indre","betterave-somme"]
+  };
+  Object.values(ESSAI_EXPORT).forEach(ids => {
+    document.getElementById('essai').value = ids.join(',');
     render();
     clones.push(cloneAndTag(slideEssai));
   });
