@@ -960,6 +960,24 @@
   .preco.editing .tag-top[contenteditable]{ outline:1px dashed rgba(13,56,32,0.5); outline-offset:4px; cursor:text; opacity:1; }
   .preco.editing .tag-top[contenteditable]:focus{ outline:1.5px solid var(--vert); }
 
+
+  /* ===== Barre de contrôle : grille 3 colonnes alignée ===== */
+  .controls{ grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 18px 24px !important; align-items:start !important; }
+  .controls .ctl-wide{ grid-column:auto !important; }
+  .controls .ctl > label:first-child{ min-height:14px; }
+  .controls textarea{ min-height:84px !important; }
+  .controls #pack-selects{ display:flex; flex-direction:column; gap:0; }
+  .controls #pack-selects .pack-row > label{ font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:1.2px; text-transform:uppercase; opacity:0.75; }
+  .controls .cult-checks .ctl-check{ flex:1 1 calc(50% - 8px); }
+  .ctl-footer{
+    grid-column:1 / -1; display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    padding-top:16px; border-top:1px dashed rgba(13,56,32,0.15);
+  }
+  .ctl-footer .ctl-check{ align-self:auto; }
+  .ctl-footer .footer-spacer{ flex:1 1 auto; }
+  .ctl-footer .btn-print{ align-self:auto; }
+  @media (max-width: 1000px){ .controls{ grid-template-columns: 1fr !important; } }
+
   /* ================ Impression ================ */
   /* Impression — slide native 1280×720 (16:9) remplie à bloc */
   @page { size: 338.67mm 190.5mm; margin: 0; }
@@ -1007,6 +1025,26 @@
   </div>
 
   <div class="ctl ctl-wide">
+    <label>Problématique</label>
+    <select id="problem">
+      <option value="generale">Généraliste</option>
+      <option value="stress-hydrique">Stress hydrique</option>
+      <option value="proteines-ble">+3% protéines (blé)</option>
+      <option value="autre">Autre (texte libre)</option>
+    </select>
+    <input id="problem-autre" type="text" placeholder="Décrivez la problématique…" style="display:none;margin-top:8px;" />
+  </div>
+
+  <div class="ctl ctl-wide">
+    <label>Témoignages</label>
+    <select id="temoin">
+      <option value="">Aucun</option>
+      <option value="ble">Blé</option>
+      <option value="pdt">Pomme de terre</option>
+    </select>
+  </div>
+
+  <div class="ctl ctl-wide">
     <label>Cultures <span style="opacity:0.6;font-weight:400;text-transform:none;letter-spacing:0;">(1 slide préco + 1 slide compo par culture)</span></label>
     <div class="cult-checks" id="cultures">
       <label class="ctl-check"><input type="checkbox" class="cult-cb" value="ble" checked /><span>Blé / Céréales</span></label>
@@ -1016,7 +1054,10 @@
     </div>
   </div>
 
-  <div class="ctl ctl-wide" id="pack-selects"></div>
+  <div class="ctl">
+    <label>Packs &amp; prix</label>
+    <div id="pack-selects"></div>
+  </div>
 
   <div class="ctl ctl-wide">
     <label>Produits complémentaires choisis</label>
@@ -1042,46 +1083,12 @@
     </div>
   </div>
 
-  <div class="ctl ctl-wide">
-    <label>Problématique</label>
-    <select id="problem">
-      <option value="generale">Généraliste</option>
-      <option value="stress-hydrique">Stress hydrique</option>
-      <option value="proteines-ble">+3% protéines (blé)</option>
-      <option value="autre">Autre (texte libre)</option>
-    </select>
-    <input id="problem-autre" type="text" placeholder="Décrivez la problématique…" style="display:none;margin-top:8px;" />
-  </div>
-
-  <input id="surface" type="hidden" value="67" />
-  <input id="catotal" type="hidden" value="3 956" />
-  <input id="coutha" type="hidden" value="59" />
-
   <div class="ctl ctl-wide" style="position:relative;">
     <label>Résultats essais <span style="opacity:0.6;font-weight:400;text-transform:none;letter-spacing:0;">(max 6)</span></label>
     <button type="button" id="essai-btn" class="essai-btn">Aucun — cliquez pour choisir ▾</button>
     <div id="essai-menu" class="essai-menu" hidden></div>
     <input id="essai" type="hidden" value="" />
   </div>
-
-  <div class="ctl ctl-wide">
-    <label>Témoignages</label>
-    <select id="temoin">
-      <option value="">Aucun</option>
-      <option value="ble">Blé</option>
-      <option value="pdt">Pomme de terre</option>
-    </select>
-  </div>
-
-  <label class="ctl-check">
-    <input type="checkbox" id="ibc-mode" />
-    <span>Sans prix</span>
-  </label>
-
-  <label class="ctl-check">
-    <input type="checkbox" id="hide-compo" />
-    <span>Masquer slide composition</span>
-  </label>
 
   <div class="ctl ctl-wide">
     <label>Problématiques identifiées <span style="opacity:0.6;font-weight:400;text-transform:none;letter-spacing:0;">(500 car. max)</span></label>
@@ -1093,8 +1100,23 @@
     <textarea id="obj" maxlength="500" placeholder="Ex : Mettre en place un programme foliaire complet dès la reprise de végétation."></textarea>
   </div>
 
-  <button class="btn-print" onclick="exportPDF(false)">Télécharger cette fiche en PDF</button>
-  <button class="btn-print btn-secondary" onclick="exportPDF(true)">Télécharger toutes les pages</button>
+  <input id="surface" type="hidden" value="67" />
+  <input id="catotal" type="hidden" value="3 956" />
+  <input id="coutha" type="hidden" value="59" />
+
+  <div class="ctl-footer">
+    <label class="ctl-check">
+      <input type="checkbox" id="ibc-mode" />
+      <span>Sans prix</span>
+    </label>
+    <label class="ctl-check">
+      <input type="checkbox" id="hide-compo" />
+      <span>Masquer slide composition</span>
+    </label>
+    <div class="footer-spacer"></div>
+    <button class="btn-print" onclick="exportPDF(false)">Télécharger cette fiche en PDF</button>
+    <button class="btn-print btn-secondary" onclick="exportPDF(true)">Télécharger toutes les pages</button>
+  </div>
 </div>
 
 <!-- ==================== Zone slides ==================== -->
