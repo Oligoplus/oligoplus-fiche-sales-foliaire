@@ -1108,7 +1108,7 @@
         <div class="cp-calc" id="calc-solar"></div>
       </div>
       <div class="comp-prices" data-p="fusion">
-        <div class="cp-ctl-title">Fusion <span>· prix 14,11 €/L (bidon 10 L)</span></div>
+        <div class="cp-ctl-title">Fusion⁺ <span>· prix 14,11 €/L (bidon 10 L)</span></div>
         <label>Litres<input type="text" id="lit-fusion" value="10" inputmode="decimal" /></label>
         <label>Remise (%)<input type="text" id="rem-fusion" value="0" inputmode="decimal" /></label>
         <div class="cp-calc" id="calc-fusion"></div>
@@ -1738,6 +1738,7 @@ const SOL_ELEMENTS = {
   "Finisher": "Potassium · Bore · Molybdène",
   "Starter Grossissement": "Phosphore · Cuivre · Manganèse · Zinc",
   "Étincelle": "Phosphore · Potassium · Calcium · Magnésium · Zinc · Manganèse",
+  "Fusion": "Azote · Manganèse · Cuivre · Zinc",
   "Climax": "16 acides aminés"
 };
 
@@ -1755,16 +1756,34 @@ function compPricing(key){
   return { litres, remise, prixL, total: litres * prixL };
 }
 const COMPLEMENTS = {
+  /* Fiche commerciale "Fusion 3.pdf" — verbatim */
   fusion: {
-    name: "Fusion",
-    kind: "Oligo-éléments",
-    tagline: "",
-    table: null,
+    name: "Fusion⁺",
+    kind: "Engrais minéral composé d'oligo-éléments",
+    tagline: "Installe le rendement dès l'implantation des cultures",
+    table: { head: ["Élément", "%", "g/L"], rows: [
+      ["Azote total (N)", "3,5", "—"],
+      ["dont azote uréique", "3,5", "—"],
+      ["Manganèse (Mn)", "19,2", "336"],
+      ["Cuivre (Cu)", "6,3", "110"],
+      ["Zinc (Zn)", "5,2", "91"]
+    ]},
     rows: [
-      ["Conditionnement", "Bidon 10 l"]
+      ["Doses", "1 à 3 L/ha"],
+      ["Réglementation", "PFC1(C)(II)(b) · Suspension liquide"],
+      ["Conditionnement", "Bidon 10 litres"]
     ],
-    extraRows: [],
-    roles: null
+    extraRows: [
+      ["Céréales", "3 feuilles jusqu'à 2 nœuds"],
+      ["Maïs", "4-8 feuilles"],
+      ["Pomme de terre", "1 semaine après la levée"],
+      ["Betterave", "Couverture du rang"]
+    ],
+    roles: [
+      ["Cu", "Rôle dans la fertilité de l'épi · Résistance de la paroi cellulaire"],
+      ["Mn", "Nécessaire à la formation des sucres et des amidons · Aide à l'utilisation et à l'assimilation de l'azote · Aide à la synthèse de la chlorophylle"],
+      ["Zn", "Synthèse de protéines · Augmentation de la fertilité épis"]
+    ]
   },
   etincelle: {
     name: "Étincelle",
@@ -2057,7 +2076,7 @@ const STADES_OPTIONS = [
   "6-8 feuilles","Début tubérisation","Couverture des rangs","Croissance",
   "Crochet","Fermeture","Stabilisée"
 ];
-const PRODUITS_OPTIONS = ["Climax","Starter","Finisher","Starter Grossissement","Étincelle","Solar"];
+const PRODUITS_OPTIONS = ["Climax","Starter","Finisher","Starter Grossissement","Étincelle","Solar","Fusion"];
 const PICTO_LABELS = {
   tallage:"Tallage", dfe:"DFE", epiaison:"Épiaison", reprise:"Reprise de végétation",
   floraison:"Floraison", feuilles:"Feuilles", couverture:"Couverture des rangs",
