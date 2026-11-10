@@ -542,52 +542,58 @@
   }
   .preco .mais-frise-track{
     position: relative;
-    height: 120px;
+    height: 180px;
     margin: 0 10px;
   }
+  /* Rail horizontal placé plus bas pour laisser la place au texte produit au-dessus */
   .preco .mais-frise-rail{
     position: absolute;
-    left: 0; right: 0; top: 70px;
+    left: 0; right: 0; top: 140px;
     height: 2px;
     background: rgba(13,56,32,0.35);
   }
   .preco .mais-stage-tick{
     position: absolute;
-    top: 64px;
+    top: 134px;
     transform: translateX(-50%);
     width: 2px; height: 14px;
     background: rgba(13,56,32,0.45);
   }
-  .preco .mais-stage-tick.key{ background: var(--vert); height: 18px; top: 62px; }
+  .preco .mais-stage-tick.key{ background: var(--vert); height: 18px; top: 132px; }
   .preco .mais-stage-label{
     position: absolute;
-    top: 86px;
+    top: 156px;
     transform: translateX(-50%);
     font-family:'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--vert);
     letter-spacing: 0.5px;
     white-space: nowrap;
   }
+  /* Bande colorée large qui matérialise VRAIMENT la fenêtre d'application */
   .preco .mais-frise-zone{
     position: absolute;
-    top: 10px;
-    height: 44px;
-    background: var(--vert);
-    color: var(--blanc-casse);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px 10px;
+    top: 126px;
+    height: 30px;
+    background: rgba(13,56,32,0.22);
+    border-left: 3px solid var(--vert);
+    border-right: 3px solid var(--vert);
+    border-radius: 4px;
     box-sizing: border-box;
-    min-width: 80px;
-    box-shadow: 0 4px 10px rgba(13,56,32,0.18);
+  }
+  /* Bloc texte au-dessus de la bande : num + produit en entier */
+  .preco .mais-frise-zone-text{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
   }
   .preco .mais-frise-zone-num{
-    position: absolute;
-    top: -22px; left: 50%; transform: translateX(-50%);
     font-family:'IBM Plex Mono', monospace;
     font-size: 10px; letter-spacing: 1.5px; text-transform:uppercase;
     color: var(--vert); opacity:0.7; font-weight:600;
@@ -595,15 +601,11 @@
   }
   .preco .mais-frise-zone-label{
     font-family: 'Inter', sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
-    color: var(--blanc-casse);
-    text-align: center;
-    line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
+    color: var(--vert);
+    line-height: 1.25;
+    max-width: 240px;
   }
   .preco .mais-frise-footnote{
     margin-top: 18px;
@@ -2448,8 +2450,9 @@ const MAIS_STAGE_POS = {
   'VT': 73, 'R1': 80, 'R2': 84, 'R3': 88, 'R4': 92, 'R5': 96, 'R6': 100
 };
 /* Repères visibles sur la frise (ceux qu'on affiche en label) */
-const MAIS_STAGE_TICKS = ['VE','V1','V3','V6','V8','V10','V12','VT','R1','R3','R6'];
-const MAIS_STAGE_KEY_TICKS = ['V6','V8','V12','VT','R1','R3']; /* pictés plus marqués */
+/* Option B : ticks aux bornes réelles des plages utilisées dans les packs maïs */
+const MAIS_STAGE_TICKS = ['VE','V2','V4','V6','V8','V10','V12','VT','R1','R3'];
+const MAIS_STAGE_KEY_TICKS = ['V2','V4','V6','V8','V10','V12','VT','R1','R3']; /* tous les ticks utilisés sont des bornes de plages */
 
 /* Parse un stade texte type "V2–V8 (…)" ou "V6–V8 (6 à 8 feuilles)" → {start,end} */
 function parseMaisStageRange(stade){
@@ -2526,21 +2529,29 @@ function renderMaisFrise(slide, cult, passages){
     track.appendChild(lbl);
   });
 
-  // Zones d'application
+  // Zones d'application : bande colorée large + bloc texte au-dessus
   zones.forEach((z) => {
+    const mid = (z.start + z.end) / 2;
+    // La bande colorée (sur le rail)
     const zone = document.createElement('div');
     zone.className = 'mais-frise-zone';
     zone.style.left = z.start + '%';
-    zone.style.width = Math.max(z.end - z.start, 5) + '%';
+    zone.style.width = Math.max(z.end - z.start, 2) + '%';
+    track.appendChild(zone);
+    // Le bloc texte au-dessus, centré sur le milieu de la plage
+    const textWrap = document.createElement('div');
+    textWrap.className = 'mais-frise-zone-text';
+    textWrap.style.left = (mid - 15) + '%';
+    textWrap.style.width = '30%';
     const num = document.createElement('div');
     num.className = 'mais-frise-zone-num';
     num.textContent = `Passage ${z.num} · ${z.startLbl}→${z.endLbl}`;
     const lbl = document.createElement('div');
     lbl.className = 'mais-frise-zone-label';
     lbl.textContent = z.label;
-    zone.appendChild(num);
-    zone.appendChild(lbl);
-    track.appendChild(zone);
+    textWrap.appendChild(num);
+    textWrap.appendChild(lbl);
+    track.appendChild(textWrap);
   });
 }
 
