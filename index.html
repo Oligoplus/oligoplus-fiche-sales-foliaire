@@ -514,84 +514,107 @@
   }
 
   /* ---------- Frise stades Maïs (V-stades, fenêtres d'application) ---------- */
+  /* La frise prend la place de la timeline standard pour le maïs */
   .preco .mais-frise{
-    position: relative;
-    margin: 18px 60px 0 60px;
-    padding: 18px 20px 14px 20px;
-    background: rgba(13,56,32,0.04);
-    border: 1px solid rgba(13,56,32,0.12);
+    position: absolute;
+    top: 440px; left: 60px; right: 60px; bottom: 40px;
+    background: var(--bleu-ciel);
     border-radius: 10px;
+    padding: 48px 50px 40px 50px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
   }
   .preco .mais-frise-title{
+    position: absolute;
+    top: 14px; left: 24px;
     font-family:'IBM Plex Mono', monospace;
-    font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
-    color: var(--vert); opacity:0.7; font-weight:500;
-    margin-bottom: 26px;
+    font-size:10px; letter-spacing:2px; text-transform:uppercase;
+    color: var(--vert); opacity:0.75; font-weight:500;
+  }
+  .preco .mais-frise-title::before{
+    content:""; display:inline-block;
+    width:9px; height:9px; margin-right:8px;
+    background: var(--vert); vertical-align:middle;
   }
   .preco .mais-frise-track{
     position: relative;
-    height: 56px;
+    height: 120px;
     margin: 0 10px;
   }
   .preco .mais-frise-rail{
     position: absolute;
-    left: 0; right: 0; top: 36px;
+    left: 0; right: 0; top: 70px;
     height: 2px;
     background: rgba(13,56,32,0.35);
   }
   .preco .mais-stage-tick{
     position: absolute;
-    top: 30px;
+    top: 64px;
     transform: translateX(-50%);
     width: 2px; height: 14px;
     background: rgba(13,56,32,0.45);
   }
-  .preco .mais-stage-tick.key{ background: var(--vert); height: 18px; top: 28px; }
+  .preco .mais-stage-tick.key{ background: var(--vert); height: 18px; top: 62px; }
   .preco .mais-stage-label{
     position: absolute;
-    top: 48px;
+    top: 86px;
     transform: translateX(-50%);
     font-family:'IBM Plex Mono', monospace;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
     color: var(--vert);
-    letter-spacing: 0.3px;
+    letter-spacing: 0.5px;
     white-space: nowrap;
   }
   .preco .mais-frise-zone{
     position: absolute;
-    top: 0;
-    height: 30px;
-    background: rgba(13,56,32,0.18);
-    border: 1.5px solid var(--vert);
-    border-radius: 6px;
+    top: 10px;
+    height: 44px;
+    background: var(--vert);
+    color: var(--blanc-casse);
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 8px;
+    padding: 4px 10px;
     box-sizing: border-box;
-    min-width: 60px;
+    min-width: 80px;
+    box-shadow: 0 4px 10px rgba(13,56,32,0.18);
+  }
+  .preco .mais-frise-zone-num{
+    position: absolute;
+    top: -22px; left: 50%; transform: translateX(-50%);
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 1.5px; text-transform:uppercase;
+    color: var(--vert); opacity:0.7; font-weight:600;
+    white-space: nowrap;
   }
   .preco .mais-frise-zone-label{
     font-family: 'Inter', sans-serif;
-    font-size: 10.5px;
+    font-size: 12px;
     font-weight: 700;
-    color: var(--vert);
+    color: var(--blanc-casse);
     text-align: center;
-    line-height: 1.15;
+    line-height: 1.2;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
   }
   .preco .mais-frise-footnote{
-    margin-top: 12px;
+    margin-top: 18px;
     font-size: 11px;
     line-height: 1.4;
     color: var(--vert);
     opacity: 0.75;
     font-style: italic;
+    text-align: center;
   }
+  /* Quand la frise est affichée, on masque la timeline standard */
+  .preco.has-mais-frise .timeline{ display: none; }
   @media print{
     .preco .mais-frise{ break-inside: avoid; }
   }
@@ -2304,8 +2327,11 @@ function autoNotes(produits){
 }
 function getPassages(cult, preco, useCustom){
   const key = cult + '|' + preco.id;
-  if (useCustom !== false && CUSTOM[key]) return CUSTOM[key];
-  return preco.passages.map(p => ({stade: p.stade, produits: p.produits, picto: stadeToPictoKey(p.stade), notes: autoNotes(p.produits)}));
+  if (useCustom !== false && CUSTOM[key]){
+    // Les customs n'ont pas forcément num → on le recalcule à l'index
+    return CUSTOM[key].map((p, i) => ({...p, num: (p.num != null ? p.num : i+1)}));
+  }
+  return preco.passages.map((p, i) => ({num: (p.num != null ? p.num : i+1), stade: p.stade, produits: p.produits, picto: stadeToPictoKey(p.stade), notes: autoNotes(p.produits)}));
 }
 
 function setEditable(el, on){
@@ -2455,23 +2481,27 @@ function renderMaisFrise(slide, cult, passages){
   if (!frise) return;
   if (cult !== 'mais'){
     frise.hidden = true;
+    slide.classList.remove('has-mais-frise');
     return;
   }
   // Parse les ranges de chaque passage
-  const zones = passages.map(p => {
+  const zones = passages.map((p, i) => {
     const r = parseMaisStageRange(p.stade || '');
     if (!r) return null;
-    // Libellé zone = produits raccourcis (ex "15 L Climax + 2 L Finisher")
+    const num = (p.num != null ? p.num : i+1);
+    // Libellé = juste les produits (num est au-dessus dans un badge séparé)
     const prod = (p.produits || '').trim();
-    const shortProd = prod.length > 44 ? prod.slice(0, 42) + '…' : prod;
-    return { ...r, label: `Passage ${p.num} · ${shortProd}` };
+    const shortProd = prod.length > 48 ? prod.slice(0, 46) + '…' : prod;
+    return { ...r, num, label: shortProd };
   }).filter(Boolean);
 
   if (zones.length === 0){
     frise.hidden = true;
+    slide.classList.remove('has-mais-frise');
     return;
   }
   frise.hidden = false;
+  slide.classList.add('has-mais-frise');
 
   const track = q(slide, 'out-mais-frise-track');
   track.innerHTML = '';
@@ -2495,15 +2525,19 @@ function renderMaisFrise(slide, cult, passages){
     track.appendChild(lbl);
   });
 
-  // Zones d'application (empilées si elles se chevauchent — ici elles ne se chevauchent pas)
-  zones.forEach((z, i) => {
+  // Zones d'application
+  zones.forEach((z) => {
     const zone = document.createElement('div');
     zone.className = 'mais-frise-zone';
     zone.style.left = z.start + '%';
-    zone.style.width = Math.max(z.end - z.start, 4) + '%';
+    zone.style.width = Math.max(z.end - z.start, 5) + '%';
+    const num = document.createElement('div');
+    num.className = 'mais-frise-zone-num';
+    num.textContent = `Passage ${z.num} · ${z.startLbl}→${z.endLbl}`;
     const lbl = document.createElement('div');
     lbl.className = 'mais-frise-zone-label';
     lbl.textContent = z.label;
+    zone.appendChild(num);
     zone.appendChild(lbl);
     track.appendChild(zone);
   });
@@ -2732,19 +2766,53 @@ stageEl.addEventListener('paste', e => {
 });
 
 function stadeToPictoKey(stade){
-  const s = stade.toLowerCase();
+  const s = (stade || '').toLowerCase().replace(/[–—−]/g, '-');
+  // --- Céréales ---
   if (s.includes('tallage')) return 'tallage';
-  if (s.includes('dfe') || s.includes('dernière feuille') || s.includes('derniere feuille')) return 'dfe';
+  if (s.includes('épi 1 cm') || s.includes('epi 1 cm') || s.includes('1 noeud') || s.includes('1 nœud')) return 'tallage';
+  if (s.includes('dfe') || s.includes('dfp') || s.includes('dernière feuille') || s.includes('derniere feuille')) return 'dfe';
+  if (s.includes('montaison')) return 'dfe';
   if (s.includes('épiaison') || s.includes('epiaison')) return 'epiaison';
+  // --- Colza / Reprise ---
   if (s.includes('reprise')) return 'reprise';
-  if (s.includes('floraison')) return 'floraison';
-  if (s.includes('6-8 feuilles') || s.includes('6-8feuilles')) return 'feuilles';
-  if (s.includes('couverture')) return 'couverture';
-  if (s.includes('croissance')) return 'croissance';
+  if (s.includes('floraison') || s.includes('boutons floraux')) return 'floraison';
+  // --- Pomme de terre ---
   if (s.includes('crochet') && s.includes('fermeture')) return 'fermeture';
+  if (s.includes('début tubérisation') || s.includes('debut tuberisation') || s.includes('tubérisation') || s.includes('tuberisation')) return 'crochet';
   if (s.includes('crochet') || s.includes('noisette')) return 'crochet';
   if (s.includes('fermeture')) return 'fermeture';
+  if (s.includes('grossissement')) return 'fermeture';
   if (s.includes('stabilisée') || s.includes('stabilisee')) return 'stabilisee';
+  if (s.includes('végétation active') || s.includes('vegetation active') || s.includes('végétation stabilisée') || s.includes('vegetation stabilisee')) return 'stabilisee';
+  // --- Maïs (notation V/R) : parse la plage et choisit le picto selon le stade ---
+  // V1-V6 et V2-V8 : jeune plante → feuilles ; V6-V8 : feuilles ; V8-V10 : feuilles ;
+  // V10-V12 / V12-VT / VT / R1+ : montaison/épiaison → epiaison
+  const mRange = s.match(/\b([vr])\s*(\d{1,2}|t)\s*-\s*([vr])\s*(\d{1,2}|t)\b/);
+  if (mRange){
+    const endLetter = mRange[3];
+    const endVal = mRange[4];
+    // Fin = R1+ ou VT → epiaison/montaison
+    if (endLetter === 'r') return 'epiaison';
+    if (endVal === 't') return 'epiaison';
+    const endNum = parseInt(endVal, 10);
+    if (endNum >= 10) return 'epiaison';
+    return 'feuilles';
+  }
+  const mSingle = s.match(/\b([vr])\s*(\d{1,2}|t)\b/);
+  if (mSingle){
+    const letter = mSingle[1];
+    const val = mSingle[2];
+    if (letter === 'r' || val === 't') return 'epiaison';
+    const num = parseInt(val, 10);
+    if (num >= 10) return 'epiaison';
+    return 'feuilles';
+  }
+  // Nombres de feuilles explicites (ex "4 à 6 feuilles", "8 à 10 feuilles", "6-8 feuilles")
+  if (s.includes('feuilles')) return 'feuilles';
+  // --- Betteraves / fallback ---
+  if (s.includes('couverture')) return 'couverture';
+  if (s.includes('croissance')) return 'croissance';
+  if (s.includes('3-5 cm') || s.includes('3 à 5 cm')) return 'reprise';
   return null;
 }
 
