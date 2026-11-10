@@ -542,10 +542,11 @@
   }
   .preco .mais-frise-track{
     position: relative;
-    height: 180px;
+    height: 170px;
     margin: 0 10px;
+    width: calc(100% - 20px);
   }
-  /* Rail horizontal placé plus bas pour laisser la place au texte produit au-dessus */
+  /* Rail horizontal en bas */
   .preco .mais-frise-rail{
     position: absolute;
     left: 0; right: 0; top: 140px;
@@ -557,9 +558,9 @@
     top: 134px;
     transform: translateX(-50%);
     width: 2px; height: 14px;
-    background: rgba(13,56,32,0.45);
+    background: var(--vert);
   }
-  .preco .mais-stage-tick.key{ background: var(--vert); height: 18px; top: 132px; }
+  .preco .mais-stage-tick.key{ height: 18px; top: 132px; width: 3px; }
   .preco .mais-stage-label{
     position: absolute;
     top: 156px;
@@ -571,50 +572,44 @@
     letter-spacing: 0.5px;
     white-space: nowrap;
   }
-  /* Bande colorée large qui matérialise VRAIMENT la fenêtre d'application */
+  /* Bande colorée épaisse qui matérialise VRAIMENT la fenêtre d'application */
   .preco .mais-frise-zone{
     position: absolute;
-    top: 126px;
-    height: 30px;
-    background: rgba(13,56,32,0.22);
-    border-left: 3px solid var(--vert);
-    border-right: 3px solid var(--vert);
+    top: 118px;
+    height: 32px;
+    background: var(--vert);
+    opacity: 0.85;
     border-radius: 4px;
     box-sizing: border-box;
+    box-shadow: 0 2px 6px rgba(13,56,32,0.25);
   }
   /* Bloc texte au-dessus de la bande : num + produit en entier */
   .preco .mais-frise-zone-text{
     position: absolute;
     top: 0;
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     text-align: center;
   }
   .preco .mais-frise-zone-num{
     font-family:'IBM Plex Mono', monospace;
     font-size: 10px; letter-spacing: 1.5px; text-transform:uppercase;
-    color: var(--vert); opacity:0.7; font-weight:600;
+    color: var(--vert); opacity:0.75; font-weight:600;
     white-space: nowrap;
+    padding: 3px 8px;
+    background: rgba(13,56,32,0.08);
+    border-radius: 3px;
   }
   .preco .mais-frise-zone-label{
     font-family: 'Inter', sans-serif;
     font-size: 13px;
     font-weight: 700;
     color: var(--vert);
-    line-height: 1.25;
-    max-width: 240px;
-  }
-  .preco .mais-frise-footnote{
-    margin-top: 18px;
-    font-size: 11px;
-    line-height: 1.4;
-    color: var(--vert);
-    opacity: 0.75;
-    font-style: italic;
-    text-align: center;
+    line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   /* Quand la frise est affichée, on masque la timeline standard */
   .preco.has-mais-frise .timeline{ display: none; }
@@ -1326,7 +1321,6 @@
     <div class="mais-frise" id="out-mais-frise" hidden>
       <div class="mais-frise-title">Fenêtre d'application · Stades de développement du maïs</div>
       <div class="mais-frise-track" id="out-mais-frise-track"></div>
-      <div class="mais-frise-footnote">Le passage peut être effectué sur toute la fenêtre indiquée — la bande colorée matérialise l'intervalle de stades durant lequel l'application reste efficace.</div>
     </div>
   </div>
 
@@ -2495,8 +2489,7 @@ function renderMaisFrise(slide, cult, passages){
     const num = (p.num != null ? p.num : i+1);
     // Libellé = juste les produits (num est au-dessus dans un badge séparé)
     const prod = (p.produits || '').trim();
-    const shortProd = prod.length > 48 ? prod.slice(0, 46) + '…' : prod;
-    return { ...r, num, label: shortProd };
+    return { ...r, num, label: prod };
   }).filter(Boolean);
 
   if (zones.length === 0){
@@ -2529,6 +2522,11 @@ function renderMaisFrise(slide, cult, passages){
     track.appendChild(lbl);
   });
 
+  // Calcul de la largeur dispo par bloc texte (évite le chevauchement entre passages)
+  // On distribue l'espace horizontal équitablement entre les zones, avec un cap à 38%
+  const nZones = zones.length;
+  const textWidthPct = Math.min(38, Math.max(20, (100 / nZones) - 2));
+
   // Zones d'application : bande colorée large + bloc texte au-dessus
   zones.forEach((z) => {
     const mid = (z.start + z.end) / 2;
@@ -2541,8 +2539,12 @@ function renderMaisFrise(slide, cult, passages){
     // Le bloc texte au-dessus, centré sur le milieu de la plage
     const textWrap = document.createElement('div');
     textWrap.className = 'mais-frise-zone-text';
-    textWrap.style.left = (mid - 15) + '%';
-    textWrap.style.width = '30%';
+    let leftPct = mid - textWidthPct / 2;
+    // Clamp pour ne pas sortir du cadre
+    if (leftPct < 0) leftPct = 0;
+    if (leftPct + textWidthPct > 100) leftPct = 100 - textWidthPct;
+    textWrap.style.left = leftPct + '%';
+    textWrap.style.width = textWidthPct + '%';
     const num = document.createElement('div');
     num.className = 'mais-frise-zone-num';
     num.textContent = `Passage ${z.num} · ${z.startLbl}→${z.endLbl}`;
