@@ -612,6 +612,15 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
   }
+  .preco .mais-frise-zone-notes{
+    font-family: 'Inter', sans-serif;
+    font-size: 10.5px;
+    font-weight: 400;
+    color: var(--vert);
+    opacity: 0.75;
+    line-height: 1.35;
+    margin-top: 2px;
+  }
   /* Quand la frise est affichée, on masque la timeline standard */
   .preco.has-mais-frise .timeline{ display: none; }
   @media print{
@@ -1971,7 +1980,17 @@ const SOL_ELEMENTS = {
   "Starter Grossissement": "Phosphore · Cuivre · Manganèse · Zinc",
   "Étincelle": "Phosphore · Potassium · Calcium · Magnésium · Zinc · Manganèse",
   "Fusion": "Azote · Manganèse · Cuivre · Zinc",
-  "Climax": "16 acides aminés"
+  "Climax": "16 acides aminés",
+  /* BIO — compos à compléter quand Sandrine / Pierrick auront fourni les fiches techniques.
+     Déclarées vides pour empêcher le fallback sur "Starter"/"Climax" conventionnels
+     (qui donnerait une compo potentiellement fausse). */
+  "Starter Céréales BIO": "",
+  "Finisher Céréales BIO": "",
+  "Climax Essentiel BIO": "",
+  "Climax Pomme de Terre BIO": "",
+  "Vitalis Pomme de Terre BIO": "",
+  "Climax Maïs BIO": "",
+  "Starter Maïs BIO": ""
 };
 
 /* ========================================
@@ -2316,10 +2335,17 @@ const PICTO_LABELS = {
 };
 function autoNotes(produits){
   // Clés les plus longues d'abord ("Starter Grossissement" avant "Starter") pour éviter les doublons
+  // + "Starter Maïs BIO" avant "Starter" pour que les produits BIO ne matchent pas la compo conventionnelle
   const found = [];
   let rest = produits || '';
   Object.keys(SOL_ELEMENTS).sort((a, b) => b.length - a.length).forEach(k => {
-    if (rest.includes(k)){ found.push(`${k} — ${SOL_ELEMENTS[k]}`); rest = rest.split(k).join(' '); }
+    if (rest.includes(k)){
+      // Si la compo est vide (BIO en attente de fiches techniques), on consume le texte sans push
+      if (SOL_ELEMENTS[k] && SOL_ELEMENTS[k].trim().length > 0){
+        found.push(`${k} — ${SOL_ELEMENTS[k]}`);
+      }
+      rest = rest.split(k).join(' ');
+    }
   });
   return found.join('\n');
 }
@@ -2488,9 +2514,20 @@ function renderMaisFrise(slide, cult, passages){
     const r = parseMaisStageRange(p.stade || '');
     if (!r) return null;
     const num = (p.num != null ? p.num : i+1);
-    // Libellé = juste les produits (num est au-dessus dans un badge séparé)
     const prod = (p.produits || '').trim();
-    return { ...r, num, label: prod };
+    // Convertit V/R en nb feuilles pour l'affichage agri-friendly.
+    // V1..V12 → "1 à 12 feuilles", VT → "sortie panicule", R1..R6 → "floraison → maturité"
+    const toFeuilles = (lbl) => {
+      if (lbl === 'VT') return 'sortie panicule';
+      if (lbl === 'VE') return 'levée';
+      if (/^V(\d+)$/.test(lbl)) return lbl.match(/^V(\d+)$/)[1] + ' f.';
+      if (/^R(\d+)$/.test(lbl)) return lbl;
+      return lbl;
+    };
+    const feuillesLabel = `${toFeuilles(r.startLbl)} → ${toFeuilles(r.endLbl)}`;
+    // Compo (notes) : réutilise autoNotes pour cohérence avec les autres cultures
+    const notes = (p.notes != null && p.notes !== '') ? p.notes : autoNotes(p.produits);
+    return { ...r, num, label: prod, feuillesLabel, notes };
   }).filter(Boolean);
 
   if (zones.length === 0){
@@ -2548,12 +2585,20 @@ function renderMaisFrise(slide, cult, passages){
     textWrap.style.width = textWidthPct + '%';
     const num = document.createElement('div');
     num.className = 'mais-frise-zone-num';
-    num.textContent = `Passage ${z.num} · ${z.startLbl}→${z.endLbl}`;
+    // Vocabulaire agri en premier (feuilles), notation V en secondaire entre parenthèses
+    num.textContent = `Passage ${z.num} · ${z.feuillesLabel} (${z.startLbl}→${z.endLbl})`;
     const lbl = document.createElement('div');
     lbl.className = 'mais-frise-zone-label';
     lbl.textContent = z.label;
     textWrap.appendChild(num);
     textWrap.appendChild(lbl);
+    // Compo (notes) sous le libellé produit, comme sur les autres cultures (retour Sephi)
+    if (z.notes && z.notes.trim().length > 0){
+      const notesEl = document.createElement('div');
+      notesEl.className = 'mais-frise-zone-notes';
+      notesEl.innerHTML = escHtml(z.notes).replace(/\n/g, '<br>');
+      textWrap.appendChild(notesEl);
+    }
     track.appendChild(textWrap);
   });
 }
