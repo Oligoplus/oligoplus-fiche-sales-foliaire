@@ -1449,6 +1449,19 @@ const PRECOS = {
       ]
     },
     {
+      id: "ble-climax-uab",
+      titre: "Blé — Climax UAB",
+      sub: "",
+      volume: 40,
+      compo: "climax-uab",
+      passages: [
+        { num:1, stade:"Montaison", produits:"20 L/ha Climax UAB",
+          agro:"Phase de construction du nombre d'épis — nutrition azotée optimisée." },
+        { num:2, stade:"DFE", produits:"20 L/ha Climax UAB",
+          agro:"Phase déterminante pour le rendement — nutrition ciblée au moment clé." }
+      ]
+    },
+    {
       id: "ble-essentiel",
       titre: "Blé — Pack Essentiel",
       sub: "",
@@ -1531,6 +1544,19 @@ const PRECOS = {
         { num:2, stade:"Floraison",             produits:"20 L/ha Climax",
           agro:"Phase déterminante pour le nombre de siliques et le remplissage — le couplage Étincelle + Climax donne les meilleurs résultats sur colza." }
       ]
+    },
+    {
+      id: "colza-climax-uab",
+      titre: "Colza — Climax UAB",
+      sub: "",
+      volume: 40,
+      compo: "climax-uab",
+      passages: [
+        { num:1, stade:"Reprise de végétation", produits:"20 L/ha Étincelle",
+          agro:"Relance de la croissance après l'hiver — levée du blocage phosphore." },
+        { num:2, stade:"Floraison",             produits:"20 L/ha Climax UAB",
+          agro:"Phase déterminante pour le nombre de siliques et le remplissage — le couplage Étincelle + Climax UAB donne les meilleurs résultats sur colza." }
+      ]
     }
   ],
   "betteraves": [
@@ -1546,6 +1572,21 @@ const PRECOS = {
         { num:2, stade:"Couverture des rangs", produits:"5 L/ha Climax",
           agro:"Nutrition continue durant la phase de croissance." },
         { num:3, stade:"Couverture des rangs", produits:"5 L/ha Climax",
+          agro:"Soutien final sur la constitution du rendement." }
+      ]
+    },
+    {
+      id: "bett-climax-uab",
+      titre: "Betteraves — Climax UAB",
+      sub: "",
+      volume: 15,
+      compo: "climax-uab",
+      passages: [
+        { num:1, stade:"Couverture des rangs", produits:"5 L/ha Climax UAB",
+          agro:"Phase de croissance active — nutrition d'accompagnement." },
+        { num:2, stade:"Couverture des rangs", produits:"5 L/ha Climax UAB",
+          agro:"Nutrition continue durant la phase de croissance." },
+        { num:3, stade:"Couverture des rangs", produits:"5 L/ha Climax UAB",
           agro:"Soutien final sur la constitution du rendement." }
       ]
     },
@@ -1619,6 +1660,17 @@ const PRECOS = {
       ]
     },
     {
+      id: "mais-climax-uab",
+      titre: "Maïs — Climax UAB",
+      sub: "",
+      volume: 40,
+      compo: "climax-uab",
+      passages: [
+        { num:1, stade:"V6–V8 (6 à 8 feuilles)", produits:"40 L/ha Climax UAB",
+          agro:"Passage unique au stade clé — nutrition d'accompagnement de la croissance active." }
+      ]
+    },
+    {
       id: "mais-bio",
       titre: "Maïs Grain BIO — Pack Essentiel",
       sub: "",
@@ -1686,6 +1738,19 @@ const PRECOS = {
         { num:2, stade:"Avant floraison (boutons floraux visibles)", produits:"10 L/ha Climax",
           agro:"Second passage avant floraison — attention : max 20 L/ha total, un excès d'azote fait verser le lin." }
       ]
+    },
+    {
+      id: "lin-climax-uab",
+      titre: "Lin — Climax UAB",
+      sub: "",
+      volume: 20,
+      compo: "climax-uab",
+      passages: [
+        { num:1, stade:"3–5 cm",                            produits:"10 L/ha Climax UAB",
+          agro:"Premier passage au stade jeune — nutrition de démarrage." },
+        { num:2, stade:"Avant floraison (boutons floraux visibles)", produits:"10 L/ha Climax UAB",
+          agro:"Second passage avant floraison — attention : max 20 L/ha total, un excès d'azote fait verser le lin." }
+      ]
     }
   ],
   "pdt": [
@@ -1697,6 +1762,17 @@ const PRECOS = {
       compo: "climax-normal",
       passages: [
         { num:1, stade:"Début tubérisation", produits:"3 L/ha Climax par passage · ~13 passages",
+          agro:"Soutien de la tubérisation — application fractionnée (40 L/ha au total)." }
+      ]
+    },
+    {
+      id: "pdt-climax-uab",
+      titre: "Pomme de terre — Climax UAB",
+      sub: "",
+      volume: 40,
+      compo: "climax-uab",
+      passages: [
+        { num:1, stade:"Début tubérisation", produits:"3 L/ha Climax UAB par passage · ~13 passages",
           agro:"Soutien de la tubérisation — application fractionnée (40 L/ha au total)." }
       ]
     },
@@ -1772,6 +1848,27 @@ const COMPOS = {
       ["C organique",       "9,9 %"],
       ["Matière sèche",     "26 %"],
       ["Rapport Corg / N",  "5,2"]
+    ]
+  },
+  "climax-uab": {
+    titre: "Climax UAB",
+    volume: 40,
+    apportsLabel: "Composition",
+    /* Fiche commerciale Climax UAB A4 — verbatim */
+    elements: [
+      ["Limiter les accumulations de nitrate (NO₃⁻) et d'ammonium (NH₄⁺)", ""],
+      ["Optimiser la photosynthèse", ""],
+      ["Valoriser l'azote", ""],
+      ["Réduire les stress abiotiques", ""]
+    ],
+    footnote: "Engrais organique NK NFU 42-001/8A · Utilisable en agriculture biologique conformément au règlement UE 2018/848 · Fabrication France · Conditionnement IBC 1000 litres",
+    apports: [
+      ["N (Azote total)",   "3,3 %"],
+      ["dont N organique",  "3,3 %"],
+      ["K₂O (Potassium)",   "4,8 %"],
+      ["C organique",       "25 %"],
+      ["Aspect",            "Liquide brun"],
+      ["Densité",           "1,3"]
     ]
   },
   "essentiel": {
@@ -2168,10 +2265,11 @@ const UNIT_PRICES = {
   "pdt-tuberisation":   { total: 6670, surface: 33 },
   "pdt-grossissement":  { total: 4922, surface: 33 }
 };
-/* Climax seul : vendu au litre. Prix de base 1,40 €/L (TARIFS FOLIAIRE 26), remise par défaut 8 % (1 unité morte saison),
-   1 unité = IBC 1000 L. Total = litres × prix remisé ; €/ha = prix remisé × dose/ha du pack. */
-const CLIMAX_BASE_PRICE = 1.40;
-const isClimaxPack = id => { const p = findPreco(id); return !!(p && p.compo === 'climax-normal'); };
+/* Climax seul : vendu au litre. Prix de base (hors morte saison) selon variant (TARIFS FOLIAIRE 26),
+   remise par défaut 8 % (1 unité morte saison), 1 unité = IBC 1000 L.
+   Total = litres × prix remisé ; €/ha = prix remisé × dose/ha du pack. */
+const CLIMAX_BASE_PRICE = { "climax-normal": 1.40, "climax-uab": 1.65 };
+const isClimaxPack = id => { const p = findPreco(id); return !!(p && (p.compo === 'climax-normal' || p.compo === 'climax-uab')); };
 const fmtNum = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 const parseNum = v => parseFloat(String(v || '').replace(/\s/g, '').replace('€','').replace(',', '.'));
 function packDefaults(id){
@@ -2202,7 +2300,8 @@ function recalcClimaxRow(row, id, changed){
   if (changed === 'surface' && surf > 0 && dose > 0) inp('litres').value = fmtNum(surf * dose);
   const litres = parseNum(inp('litres').value) || 0;
   const rem = parseNum(String(inp('remise').value).replace('%','')) || 0;
-  const prixL = Math.round(CLIMAX_BASE_PRICE * (1 - rem / 100) * 100) / 100;
+  const basePrice = (preco && CLIMAX_BASE_PRICE[preco.compo]) || CLIMAX_BASE_PRICE["climax-normal"];
+  const prixL = Math.round(basePrice * (1 - rem / 100) * 100) / 100;
   const total = litres * prixL;
   const parHa = prixL * dose;
   const f2 = n => n.toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}).replace(/[\u202f\u00a0]/g,' ');
@@ -2560,29 +2659,30 @@ function renderMaisFrise(slide, cult, passages){
     track.appendChild(lbl);
   });
 
-  // Calcul de la largeur dispo par bloc texte (évite le chevauchement entre passages)
-  // On distribue l'espace horizontal équitablement entre les zones, avec un cap à 38%
-  const nZones = zones.length;
-  const textWidthPct = Math.min(38, Math.max(20, (100 / nZones) - 2));
+  // Calcul des couloirs horizontaux pour chaque bloc texte :
+  // chaque bloc occupe l'espace entre le midpoint avec sa zone précédente
+  // et le midpoint avec sa zone suivante. Élimine le chevauchement entre
+  // passages (fix diagnostic Claude Code 10/11).
+  const centers = zones.map(z => (z.start + z.end) / 2);
 
   // Zones d'application : bande colorée large + bloc texte au-dessus
-  zones.forEach((z) => {
-    const mid = (z.start + z.end) / 2;
+  zones.forEach((z, i) => {
+    const c = centers[i];
+    const leftBound  = i === 0 ? 0 : (centers[i - 1] + c) / 2;
+    const rightBound = i === centers.length - 1 ? 100 : (c + centers[i + 1]) / 2;
+    const leftPct  = leftBound + 1;                 // 1% de respiration
+    const widthPct = (rightBound - leftBound) - 2;  // 1% de respiration de chaque côté
     // La bande colorée (sur le rail)
     const zone = document.createElement('div');
     zone.className = 'mais-frise-zone';
     zone.style.left = z.start + '%';
     zone.style.width = Math.max(z.end - z.start, 2) + '%';
     track.appendChild(zone);
-    // Le bloc texte au-dessus, centré sur le milieu de la plage
+    // Le bloc texte au-dessus — couloir borné par les midpoints voisins
     const textWrap = document.createElement('div');
     textWrap.className = 'mais-frise-zone-text';
-    let leftPct = mid - textWidthPct / 2;
-    // Clamp pour ne pas sortir du cadre
-    if (leftPct < 0) leftPct = 0;
-    if (leftPct + textWidthPct > 100) leftPct = 100 - textWidthPct;
     textWrap.style.left = leftPct + '%';
-    textWrap.style.width = textWidthPct + '%';
+    textWrap.style.width = widthPct + '%';
     const num = document.createElement('div');
     num.className = 'mais-frise-zone-num';
     // Vocabulaire agri en premier (feuilles), notation V en secondaire entre parenthèses
